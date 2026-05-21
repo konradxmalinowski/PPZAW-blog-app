@@ -8,6 +8,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'color')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'description')
+    fields = ('name', 'slug', 'description', 'color', 'meta_description')
 
 
 @admin.register(Post)
@@ -19,6 +20,10 @@ class PostAdmin(MarkdownxModelAdmin):
     raw_id_fields = ('author',)
     date_hierarchy = 'publish'
     ordering = ('status', 'publish')
+    fieldsets = (
+        ('Treść', {'fields': ('title', 'slug', 'author', 'category', 'body', 'excerpt', 'cover_image', 'cover_image_alt', 'tags', 'status', 'publish')}),
+        ('SEO', {'fields': ('meta_description', 'meta_keywords', 'canonical_url'), 'classes': ('collapse',)}),
+    )
 
 
 @admin.register(Comment)

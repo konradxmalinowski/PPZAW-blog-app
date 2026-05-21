@@ -9,6 +9,19 @@
   {% endif %}
 {% endblock %}
 
+{% block extra_head %}
+{% if posts.has_previous %}
+<link rel="prev" href="?page={{ posts.previous_page_number }}">
+{% endif %}
+{% if posts.has_next %}
+<link rel="next" href="?page={{ posts.next_page_number }}">
+{% endif %}
+{% if tag %}
+<!-- Tag pages are noindex to avoid duplicate content -->
+{% block meta_robots %}noindex, follow{% endblock %}
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="content-wrapper">
 
@@ -58,7 +71,7 @@
         </h2>
 
         <div class="post-card-meta">
-          <span class="post-meta-date">{{ post.publish|date:"Y-m-d" }}</span>
+          <time class="post-meta-date" datetime="{{ post.publish|date:'c' }}">{{ post.publish|date:"Y-m-d" }}</time>
           <span class="post-meta-sep"> &middot; </span>
           <a href="{% url 'blog:post_list_by_author' post.author.username %}" class="post-meta-author">@{{ post.author.username }}</a>
           {% if post.category %}

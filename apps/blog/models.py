@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -16,6 +18,7 @@ class Category(models.Model):
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
     color = models.CharField(max_length=7, default='#7ee787')
+    meta_description = models.CharField(max_length=160, blank=True)
 
     class Meta:
         verbose_name = 'Category'
@@ -59,6 +62,24 @@ class Post(models.Model):
     status = models.CharField(max_length=10, choices=STATUS, default='draft')
     reading_time = models.PositiveIntegerField(default=0)
 
+    # SEO fields
+    meta_description = models.CharField(
+        max_length=160, blank=True,
+        help_text='Meta description (max 160 chars). Puste = auto z excerpt.'
+    )
+    meta_keywords = models.CharField(
+        max_length=255, blank=True,
+        help_text='Słowa kluczowe oddzielone przecinkami.'
+    )
+    cover_image_alt = models.CharField(
+        max_length=125, blank=True,
+        help_text='Alt text dla cover image (SEO + dostępność).'
+    )
+    canonical_url = models.URLField(
+        blank=True,
+        help_text='Kanoniczny URL (puste = auto z get_absolute_url).'
+    )
+
     objects = models.Manager()
     published = PublishedManager()
 
@@ -85,6 +106,24 @@ class Post(models.Model):
                 self.slug,
             ],
         )
+
+    def get_meta_description(self):
+        """Zwraca meta description: custom → excerpt → body[:160]."""
+        if self.meta_description:
+            return self.meta_description
+        if self.excerpt:
+            return self.excerpt[:160]
+        plain = re.sub(r'[#*`\[\]()>]', '', self.body)
+        return plain[:160].strip()
+
+    def get_canonical_url(self, request=None):
+        """Zwraca kanoniczny URL (custom lub auto)."""
+        if self.canonical_url:
+            return self.canonical_url
+        url = self.get_absolute_url()
+        if request:
+            return request.build_absolute_uri(url)
+        return url
 
     def __str__(self):
         return self.title

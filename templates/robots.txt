@@ -3,5 +3,16 @@ Allow: /
 Disallow: /admin/
 Disallow: /accounts/profile/
 Disallow: /accounts/profile/edit/
+Disallow: /api/
+Disallow: /markdownx/
+Disallow: /*?page=*
+Disallow: /search/
 
-Sitemap: http://127.0.0.1:8000/sitemap.xml
+# Crawl-delay dla botów nie-Google
+User-agent: Bingbot
+Crawl-delay: 10
+
+User-agent: Googlebot
+Allow: /
+
+Sitemap: {{ SITE_URL }}/sitemap.xml

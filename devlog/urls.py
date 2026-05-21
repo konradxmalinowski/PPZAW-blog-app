@@ -5,11 +5,23 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
-from apps.blog.sitemaps import CategorySitemap, PostSitemap
+from apps.blog.sitemaps import CategorySitemap, PostSitemap, StaticSitemap
+
+
+class RobotsTxtView(TemplateView):
+    template_name = 'robots.txt'
+    content_type = 'text/plain'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['SITE_URL'] = settings.SITE_URL
+        return ctx
+
 
 sitemaps = {
     'posts': PostSitemap,
     'categories': CategorySitemap,
+    'static': StaticSitemap,
 }
 
 urlpatterns = [
@@ -26,7 +38,7 @@ urlpatterns = [
     ),
     path(
         'robots.txt',
-        TemplateView.as_view(template_name='robots.txt', content_type='text/plain'),
+        RobotsTxtView.as_view(),
         name='robots_txt',
     ),
 ]

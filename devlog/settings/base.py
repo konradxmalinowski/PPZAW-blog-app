@@ -35,6 +35,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'devlog.middleware.SecurityHeadersMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -57,6 +58,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'apps.blog.context_processors.sidebar_context',
+                'apps.blog.seo_context.seo_defaults',
             ],
         },
     },
@@ -116,3 +118,33 @@ EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
+
+# === SEO & Site Settings ===
+SITE_NAME = 'DevLog'
+SITE_URL = 'https://devlog.example.com'
+SITE_DESCRIPTION = 'Blog o cyklu tworzenia aplikacji webowej w Django'
+TWITTER_HANDLE = ''
+SITE_DEFAULT_OG_IMAGE = ''
+
+# === Security Headers ===
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True  # legacy but harmless
+X_FRAME_OPTIONS = 'DENY'
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+# CSP via middleware (nie przez django-csp, tylko własny middleware)
+CONTENT_SECURITY_POLICY = (
+    "default-src 'self'; "
+    "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; "
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+    "font-src 'self' https://fonts.gstatic.com; "
+    "img-src 'self' data: https:; "
+    "connect-src 'self'; "
+    "frame-ancestors 'none';"
+)
+PERMISSIONS_POLICY = (
+    "camera=(), microphone=(), geolocation=(), payment=()"
+)
+
+# Pagination for SEO
+BLOG_POSTS_PER_PAGE = 10
