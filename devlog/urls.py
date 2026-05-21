@@ -15,6 +15,7 @@ sitemaps = {
 urlpatterns = [
     path('', include('apps.blog.urls', namespace='blog')),
     path('accounts/', include('apps.accounts.urls', namespace='accounts')),
+    path('api/', include('apps.api.urls', namespace='api')),
     path('markdownx/', include('markdownx.urls')),
     path('admin/', admin.site.urls),
     path(
