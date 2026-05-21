@@ -3,8 +3,11 @@ Custom template tags and filters for the blog app.
 """
 import bleach
 from django import template
+from django.db.models import Count, Q
 from django.utils.safestring import mark_safe
 from markdownx.utils import markdownify as _markdownify
+
+from apps.blog.models import Post
 
 register = template.Library()
 
@@ -48,3 +51,53 @@ def markdownify(value):
         strip=False,
     )
     return mark_safe(clean_html)
+
+
+# ─── INCLUSION TAGS ──────────────────────────────────────────────────────────
+
+@register.inclusion_tag('partials/widget_recent_posts.html')
+def show_recent_posts(count=5):
+    """Renders the N most recently published posts."""
+    recent = Post.published.order_by('-publish')[:count]
+    return {'recent_posts': recent}
+
+
+@register.inclusion_tag('partials/widget_most_commented.html')
+def show_most_commented(count=5):
+    """Renders the N posts with the highest number of active comments."""
+    posts = (
+        Post.published
+        .annotate(comment_count=Count('comments', filter=Q(comments__active=True)))
+        .order_by('-comment_count')[:count]
+    )
+    return {'most_commented': posts}
+
+
+@register.inclusion_tag('partials/widget_tag_cloud.html')
+def show_tag_cloud():
+    """Renders a tag cloud using taggit tags sorted by usage count."""
+    from taggit.models import Tag
+    tags = (
+        Tag.objects
+        .annotate(post_count=Count('taggit_taggeditem_items'))
+        .filter(post_count__gt=0)
+        .order_by('-post_count')[:30]
+    )
+    return {'tags': tags}
+
+
+# ─── FILTERS ─────────────────────────────────────────────────────────────────
+
+@register.filter(name='reading_bar')
+def reading_bar(minutes):
+    """Returns an ASCII progress bar for reading time.
+
+    Usage: {{ post.reading_time|reading_bar }}
+    Example: {{ 3|reading_bar }} → ███░░░░░░░
+    """
+    total = 10
+    try:
+        filled = min(int(minutes), total)
+    except (TypeError, ValueError):
+        filled = 0
+    return '█' * filled + '░' * (total - filled)

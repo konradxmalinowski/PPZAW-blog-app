@@ -1,0 +1,10 @@
+<div class="tag-cloud">
+{% for tag in tags %}
+  <a href="{% url 'blog:post_list_by_tag' tag.slug %}"
+     class="tag {% if tag.post_count > 5 %}tag-lg{% elif tag.post_count > 2 %}tag-md{% else %}tag-sm{% endif %}">
+    #{{ tag.name }} <span class="tag-count">[{{ tag.post_count }}]</span>
+  </a>
+{% empty %}
+  <p class="sidebar-empty">// brak tagow</p>
+{% endfor %}
+</div>

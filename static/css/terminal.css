@@ -1300,3 +1300,57 @@ textarea::placeholder {
     flex-direction: column;
   }
 }
+
+/* ─── PHASE 3: SIDEBAR WIDGET COMPONENTS ────────────────────────────────── */
+
+/* Tag cloud */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-cloud .tag-lg {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.tag-cloud .tag-md {
+  font-size: 0.9em;
+}
+
+.tag-cloud .tag-sm {
+  font-size: 0.8em;
+  color: var(--text-secondary);
+}
+
+.tag-count {
+  color: var(--text-secondary);
+}
+
+/* Sidebar post items (recent posts, most commented) */
+.sidebar-post-item {
+  margin-bottom: 8px;
+  border-left: 2px solid var(--bg-border);
+  padding-left: 8px;
+}
+
+.sidebar-post-item a {
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+
+.sidebar-post-item a:hover {
+  color: var(--accent-green);
+}
+
+.sidebar-meta {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.8em;
+}
+
+/* Category description box */
+.category-description {
+  border: 1px solid var(--bg-border);
+}

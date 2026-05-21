@@ -1,26 +1,21 @@
-{% load static %}
+{% load static blog_tags %}
 {% comment %}
-Sidebar: recent posts, categories, tag cloud.
-Receives context from parent view (recent_posts, categories, popular_tags).
+Sidebar: recent posts (inclusion tag), categories (context_processor), tag cloud (inclusion tag).
 {% endcomment %}
 
 <!-- RECENT POSTS -->
 <div class="sidebar-box">
   <div class="sidebar-box-header">&#9472;&#9472;[ OSTATNIE POSTY ]&#9472;&#9472;</div>
   <div class="sidebar-box-body">
-    {% with recent=posts|slice:":5" %}
-      {% for recent_post in recent %}
-      <div class="sidebar-post-item">
-        <a href="{{ recent_post.get_absolute_url }}" class="sidebar-post-link">
-          <span class="sidebar-prompt">&gt;</span>
-          {{ recent_post.title|truncatechars:42 }}
-        </a>
-        <span class="sidebar-post-meta">{{ recent_post.publish|date:"Y-m-d" }}</span>
-      </div>
-      {% empty %}
-      <p class="sidebar-empty">// brak postow</p>
-      {% endfor %}
-    {% endwith %}
+    {% show_recent_posts 5 %}
+  </div>
+</div>
+
+<!-- NAJKOMENTOWANSZE -->
+<div class="sidebar-box">
+  <div class="sidebar-box-header">&#9472;&#9472;[ NAJKOMENTOWANSZE ]&#9472;&#9472;</div>
+  <div class="sidebar-box-body">
+    {% show_most_commented 5 %}
   </div>
 </div>
 
@@ -45,12 +40,6 @@ Receives context from parent view (recent_posts, categories, popular_tags).
 <div class="sidebar-box">
   <div class="sidebar-box-header">&#9472;&#9472;[ TAG CLOUD ]&#9472;&#9472;</div>
   <div class="sidebar-box-body sidebar-tags">
-    {% for tag in popular_tags %}
-    <a href="{% url 'blog:post_list_by_tag' tag.slug %}" class="tag sidebar-tag">
-      #{{ tag.name }}
-    </a>
-    {% empty %}
-    <p class="sidebar-empty">// brak tagow</p>
-    {% endfor %}
+    {% show_tag_cloud %}
   </div>
 </div>

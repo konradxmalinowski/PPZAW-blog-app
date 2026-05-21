@@ -1,0 +1,11 @@
+{% for post in most_commented %}
+<div class="sidebar-post-item">
+  <a href="{{ post.get_absolute_url }}" class="sidebar-post-link">
+    <span class="sidebar-prompt">&gt;</span>
+    {{ post.title|truncatechars:42 }}
+  </a>
+  <span class="sidebar-meta">[{{ post.comment_count }} koment.]</span>
+</div>
+{% empty %}
+<p class="sidebar-empty">// brak postow</p>
+{% endfor %}
