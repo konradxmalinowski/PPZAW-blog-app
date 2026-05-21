@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Udostepnij: {{ post.title }} — devlog{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+
+  <!-- MAIN COLUMN -->
+  <div class="posts-column">
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+      <span class="breadcrumb-path">~/blog/posts/{{ post.publish|date:"Y/m/d" }}/{{ post.slug }}$</span>
+      <span class="breadcrumb-cmd"> share post.md</span>
+    </div>
+
+    <!-- SHARE BOX -->
+    <div class="terminal-box">
+      <div class="terminal-box-header">
+        &#9484;&#9472;[ UDOSTEPNIJ POST ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
+      </div>
+      <div class="terminal-box-body">
+
+        {% if sent %}
+          <!-- SUCCESS STATE -->
+          <div class="share-success">
+            <div class="share-success-line">
+              <span class="accent-green">&gt;&gt;&gt;</span>
+              <span class="accent-green"> Email wyslany pomyslnie!</span>
+            </div>
+            <div class="share-success-detail">
+              <span class="text-muted">// Post "</span><span class="text-secondary">{{ post.title }}</span><span class="text-muted">" zostal udostepniony.</span>
+            </div>
+            <div class="share-success-actions">
+              <a href="{{ post.get_absolute_url }}" class="btn-terminal">[&lt;&lt; WRÓC DO POSTA ]</a>
+              <a href="{% url 'blog:post_share' post.id %}" class="btn-terminal btn-terminal-secondary">[ UDOSTEPNIJ PONOWNIE ]</a>
+            </div>
+          </div>
+
+        {% else %}
+          <!-- POST INFO -->
+          <div class="share-post-info">
+            <span class="text-muted">// Udostepniasz:</span>
+            <span class="accent-blue"> &gt; {{ post.title }}</span>
+          </div>
+
+          <!-- SHARE FORM -->
+          <form method="post" action="" class="share-form">
+            {% csrf_token %}
+
+            <div class="form-field">
+              <label for="{{ form.name.id_for_label }}" class="form-label">
+                &gt; name:
+              </label>
+              {{ form.name }}
+              {% if form.name.errors %}
+                <div class="form-error">{{ form.name.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="form-field">
+              <label for="{{ form.email.id_for_label }}" class="form-label">
+                &gt; email:
+              </label>
+              {{ form.email }}
+              {% if form.email.errors %}
+                <div class="form-error">{{ form.email.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="form-field">
+              <label for="{{ form.to.id_for_label }}" class="form-label">
+                &gt; to:
+              </label>
+              {{ form.to }}
+              {% if form.to.errors %}
+                <div class="form-error">{{ form.to.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="form-field">
+              <label for="{{ form.comments.id_for_label }}" class="form-label">
+                &gt; comments:
+              </label>
+              {{ form.comments }}
+              {% if form.comments.errors %}
+                <div class="form-error">{{ form.comments.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="form-submit">
+              <button type="submit" class="btn-terminal">[&gt;&gt; WYSLIJ ]</button>
+              <a href="{{ post.get_absolute_url }}" class="btn-terminal btn-terminal-secondary">[ ANULUJ ]</a>
+            </div>
+          </form>
+        {% endif %}
+
+      </div>
+      <div class="terminal-box-footer">
+        &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar-column">
+    {% include "partials/sidebar.html" %}
+  </aside>
+
+</div>
+{% endblock %}

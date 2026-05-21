@@ -67,6 +67,13 @@
     </div>
     {% endif %}
 
+    <!-- SHARE LINK -->
+    <div class="post-share-link">
+      <a href="{% url 'blog:post_share' post.id %}" class="share-btn">
+        <span class="share-prompt">&gt;</span> [>> UDOSTEPNIJ POST ]
+      </a>
+    </div>
+
     <!-- SIMILAR POSTS -->
     {% if similar_posts %}
     <div class="similar-posts-section">
@@ -95,14 +102,118 @@
     </div>
     {% endif %}
 
-    <!-- COMMENTS PLACEHOLDER (Faza 2) -->
+    <!-- COMMENTS SECTION -->
     <div class="comments-section">
-      <div class="sidebar-box-header">&#9472;&#9472;[ KOMENTARZE ]&#9472;&#9472;</div>
-      <div class="comments-placeholder">
-        <span class="accent-yellow">// Komentarze zostana zaimplementowane w Fazie 2.</span><br>
-        <span class="text-secondary">// TODO: CommentForm + CommentAdmin + comment listing</span>
+
+      <!-- Comment added success message -->
+      {% if new_comment %}
+      <div class="comment-success">
+        <span class="accent-green">&gt; Komentarz dodany pomyslnie.</span>
+        <span class="text-secondary"> // Twoj komentarz czeka na moderacje.</span>
       </div>
+      {% endif %}
+
+      <!-- List of existing comments -->
+      <div class="comments-box">
+        <div class="comments-box-header">
+          &#9484;&#9472;[ KOMENTARZE ({{ comments.count }}) ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
+        </div>
+        <div class="comments-list">
+          {% if comments %}
+            {% for comment in comments %}
+            <div class="comment-item">
+              <div class="comment-meta">
+                <span class="comment-prompt">&gt;</span>
+                <span class="comment-author">{{ comment.name }}</span>
+                <span class="comment-meta-sep"> @ </span>
+                <span class="comment-date">{{ comment.created|date:"Y-m-d H:i" }}</span>
+              </div>
+              <div class="comment-body">
+                <span class="comment-gutter">&#9482;</span>
+                {{ comment.body }}
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="comment-empty">
+              <span class="text-muted">// Brak komentarzy. Badz pierwszy!</span>
+            </div>
+          {% endif %}
+        </div>
+        <div class="comments-box-footer">
+          &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
+        </div>
+      </div>
+
+      <!-- Add comment form -->
+      <div class="comment-form-box">
+        <div class="comment-form-header">
+          &#9484;&#9472;[ DODAJ KOMENTARZ ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
+        </div>
+        <div class="comment-form-body">
+          <form method="post" action="">
+            {% csrf_token %}
+
+            <div class="form-field">
+              <label for="{{ comment_form.name.id_for_label }}" class="form-label">
+                &gt; {{ comment_form.name.label }}:
+              </label>
+              {% if request.user.is_authenticated %}
+                <input type="text"
+                       name="{{ comment_form.name.html_name }}"
+                       id="{{ comment_form.name.id_for_label }}"
+                       value="{{ request.user.get_full_name|default:request.user.username }}"
+                       readonly
+                       class="form-input form-input-readonly">
+              {% else %}
+                {{ comment_form.name }}
+                {% if comment_form.name.errors %}
+                  <div class="form-error">{{ comment_form.name.errors }}</div>
+                {% endif %}
+              {% endif %}
+            </div>
+
+            <div class="form-field">
+              <label for="{{ comment_form.email.id_for_label }}" class="form-label">
+                &gt; {{ comment_form.email.label }}:
+              </label>
+              {% if request.user.is_authenticated %}
+                <input type="email"
+                       name="{{ comment_form.email.html_name }}"
+                       id="{{ comment_form.email.id_for_label }}"
+                       value="{{ request.user.email }}"
+                       readonly
+                       class="form-input form-input-readonly">
+              {% else %}
+                {{ comment_form.email }}
+                {% if comment_form.email.errors %}
+                  <div class="form-error">{{ comment_form.email.errors }}</div>
+                {% endif %}
+              {% endif %}
+            </div>
+
+            <div class="form-field">
+              <label for="{{ comment_form.body.id_for_label }}" class="form-label">
+                &gt; {{ comment_form.body.label }}:
+              </label>
+              {{ comment_form.body }}
+              {% if comment_form.body.errors %}
+                <div class="form-error">{{ comment_form.body.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="form-submit">
+              <button type="submit" class="btn-terminal">[&gt;&gt; OPUBLIKUJ KOMENTARZ ]</button>
+            </div>
+          </form>
+        </div>
+        <div class="comment-form-footer">
+          &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
+        </div>
+      </div>
+
     </div>
+    <!-- /comments-section -->
 
   </div>
 

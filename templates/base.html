@@ -26,7 +26,7 @@
         <li><a href="{% url 'blog:post_list' %}" class="nav-link{% if section == 'blog' %} active{% endif %}">[HOME]</a></li>
         <li><a href="{% url 'blog:post_list' %}" class="nav-link">[POSTY]</a></li>
         <li class="nav-link-disabled"><span class="nav-link dimmed">[TAGI]</span></li>
-        <li class="nav-link-disabled"><span class="nav-link dimmed">[SZUKAJ]</span></li>
+        <li><a href="{% url 'blog:post_search' %}" class="nav-link{% if section == 'search' %} active{% endif %}">[SZUKAJ]</a></li>
         {% if user.is_authenticated %}
           <li><a href="{% url 'admin:index' %}" class="nav-link accent-green">[ADMIN]</a></li>
         {% else %}

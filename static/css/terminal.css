@@ -917,3 +917,386 @@ ul, ol {
     gap: 1.25rem;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   PHASE 2 — Forms, Comments, Search
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── TERMINAL BOX (generic ASCII-box container) ─────────────── */
+.terminal-box {
+  background-color: var(--bg-card);
+  border-left: 1px solid var(--bg-border);
+  border-right: 1px solid var(--bg-border);
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+}
+
+.terminal-box-header,
+.terminal-box-footer {
+  color: var(--bg-border);
+  font-size: 0.75em;
+  padding: 0 0.25rem;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: color var(--transition);
+}
+
+.terminal-box:hover .terminal-box-header,
+.terminal-box:hover .terminal-box-footer {
+  color: var(--accent-green);
+}
+
+.terminal-box-body {
+  padding: 1rem 1.25rem;
+}
+
+/* ─── FORM FIELDS ────────────────────────────────────────────── */
+.form-field {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.form-label {
+  color: var(--accent-green);
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+  background-color: var(--bg-card);
+  border: 1px solid var(--bg-border);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  border-radius: var(--radius);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+  line-height: var(--line-height);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 2px rgba(126, 231, 135, 0.1);
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.form-input-readonly {
+  color: var(--text-secondary);
+  border-color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.form-error {
+  color: var(--accent-red);
+  font-size: 0.82em;
+  margin-top: 0.15rem;
+}
+
+.form-error ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.form-submit {
+  margin-top: 1.25rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ─── TERMINAL BUTTON ────────────────────────────────────────── */
+.btn-terminal {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid var(--accent-green);
+  color: var(--accent-green);
+  padding: 0.4rem 0.85rem;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  font-weight: 600;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: background-color var(--transition), color var(--transition);
+  line-height: 1.4;
+}
+
+.btn-terminal:hover {
+  background-color: var(--accent-green);
+  color: var(--bg);
+}
+
+.btn-terminal-secondary {
+  border-color: var(--text-secondary);
+  color: var(--text-secondary);
+}
+
+.btn-terminal-secondary:hover {
+  background-color: var(--text-secondary);
+  color: var(--bg);
+}
+
+/* ─── COMMENTS SECTION ───────────────────────────────────────── */
+.comments-section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bg-border);
+}
+
+.comment-success {
+  padding: 0.75rem 1rem;
+  background-color: rgba(126, 231, 135, 0.06);
+  border: 1px solid var(--accent-green);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-size: 0.88em;
+}
+
+.comment-success .share-success-line {
+  margin-bottom: 0.2rem;
+}
+
+.comments-box {
+  background-color: var(--bg-card);
+  border-left: 1px solid var(--bg-border);
+  border-right: 1px solid var(--bg-border);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+
+.comments-box-header,
+.comments-box-footer,
+.comment-form-header,
+.comment-form-footer {
+  color: var(--bg-border);
+  font-size: 0.75em;
+  padding: 0 0.25rem;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: color var(--transition);
+}
+
+.comments-box:hover .comments-box-header,
+.comments-box:hover .comments-box-footer {
+  color: var(--accent-green);
+}
+
+.comments-list {
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.comment-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--bg-border);
+}
+
+.comment-item:last-child {
+  border-bottom: none;
+}
+
+.comment-meta {
+  font-size: 0.82em;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin-bottom: 0.35rem;
+}
+
+.comment-prompt {
+  color: var(--accent-green);
+  font-weight: 700;
+}
+
+.comment-author {
+  color: var(--accent-purple);
+  font-weight: 600;
+}
+
+.comment-meta-sep {
+  color: var(--text-muted);
+}
+
+.comment-date {
+  color: var(--text-muted);
+}
+
+.comment-body {
+  font-size: 0.88em;
+  color: var(--text-primary);
+  line-height: 1.65;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.comment-gutter {
+  color: var(--bg-border);
+  flex-shrink: 0;
+  margin-top: 0.05em;
+}
+
+.comment-empty {
+  padding: 1rem 0;
+  font-size: 0.85em;
+}
+
+/* ─── COMMENT FORM BOX ───────────────────────────────────────── */
+.comment-form-box {
+  background-color: var(--bg-card);
+  border-left: 1px solid var(--bg-border);
+  border-right: 1px solid var(--bg-border);
+  border-radius: var(--radius);
+  margin-top: 1rem;
+}
+
+.comment-form-box:hover .comment-form-header,
+.comment-form-box:hover .comment-form-footer {
+  color: var(--accent-green);
+}
+
+.comment-form-body {
+  padding: 1rem 1.25rem;
+}
+
+/* ─── SHARE LINK (post detail) ───────────────────────────────── */
+.post-share-link {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bg-border);
+}
+
+.share-btn {
+  color: var(--accent-blue);
+  font-size: 0.85em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color var(--transition);
+}
+
+.share-btn:hover {
+  color: var(--accent-green);
+}
+
+.share-prompt {
+  color: var(--accent-green);
+}
+
+/* ─── SHARE SUCCESS ──────────────────────────────────────────── */
+.share-success {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.share-success-line {
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.share-success-detail {
+  font-size: 0.85em;
+}
+
+.share-success-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+/* ─── SHARE FORM ─────────────────────────────────────────────── */
+.share-post-info {
+  margin-bottom: 1rem;
+  font-size: 0.85em;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--bg-border);
+}
+
+/* ─── SEARCH ─────────────────────────────────────────────────── */
+.search-box {
+  margin-bottom: 1.5rem;
+}
+
+.search-field {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.search-field .form-label {
+  flex-shrink: 0;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.search-field input[type="text"] {
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-submit {
+  flex-shrink: 0;
+}
+
+.search-results-section {
+  margin-top: 0.5rem;
+}
+
+.search-results-header {
+  font-size: 0.88em;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--bg-border);
+}
+
+.search-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.search-result-card {
+  margin-bottom: 1rem;
+}
+
+/* ─── RESPONSIVE: forms on mobile ───────────────────────────── */
+@media (max-width: 767px) {
+  .search-field {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-field input[type="text"] {
+    width: 100%;
+  }
+
+  .form-submit {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .share-success-actions {
+    flex-direction: column;
+  }
+}
