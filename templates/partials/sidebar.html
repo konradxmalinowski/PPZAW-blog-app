@@ -1,0 +1,56 @@
+{% load static %}
+{% comment %}
+Sidebar: recent posts, categories, tag cloud.
+Receives context from parent view (recent_posts, categories, popular_tags).
+{% endcomment %}
+
+<!-- RECENT POSTS -->
+<div class="sidebar-box">
+  <div class="sidebar-box-header">&#9472;&#9472;[ OSTATNIE POSTY ]&#9472;&#9472;</div>
+  <div class="sidebar-box-body">
+    {% with recent=posts|slice:":5" %}
+      {% for recent_post in recent %}
+      <div class="sidebar-post-item">
+        <a href="{{ recent_post.get_absolute_url }}" class="sidebar-post-link">
+          <span class="sidebar-prompt">&gt;</span>
+          {{ recent_post.title|truncatechars:42 }}
+        </a>
+        <span class="sidebar-post-meta">{{ recent_post.publish|date:"Y-m-d" }}</span>
+      </div>
+      {% empty %}
+      <p class="sidebar-empty">// brak postow</p>
+      {% endfor %}
+    {% endwith %}
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="sidebar-box">
+  <div class="sidebar-box-header">&#9472;&#9472;[ KATEGORIE ]&#9472;&#9472;</div>
+  <div class="sidebar-box-body">
+    {% for cat in categories %}
+    <div class="sidebar-category-item">
+      <a href="{% url 'blog:post_list_by_category' cat.slug %}" class="sidebar-category-link" style="color: {{ cat.color }};">
+        <span class="sidebar-prompt">&gt;</span> {{ cat.name }}
+      </a>
+      <span class="sidebar-count">[{{ cat.posts.count }}]</span>
+    </div>
+    {% empty %}
+    <p class="sidebar-empty">// brak kategorii</p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- TAG CLOUD -->
+<div class="sidebar-box">
+  <div class="sidebar-box-header">&#9472;&#9472;[ TAG CLOUD ]&#9472;&#9472;</div>
+  <div class="sidebar-box-body sidebar-tags">
+    {% for tag in popular_tags %}
+    <a href="{% url 'blog:post_list_by_tag' tag.slug %}" class="tag sidebar-tag">
+      #{{ tag.name }}
+    </a>
+    {% empty %}
+    <p class="sidebar-empty">// brak tagow</p>
+    {% endfor %}
+  </div>
+</div>

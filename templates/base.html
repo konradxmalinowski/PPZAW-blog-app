@@ -1,0 +1,76 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}devlog{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/terminal.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar-inner">
+      <div class="navbar-prompt">
+        <a href="{% url 'blog:post_list' %}" class="prompt-link">
+          <span class="prompt-bracket">[</span><span class="prompt-tilde">~</span><span class="prompt-bracket">]</span>
+          <span class="prompt-text"> devlog$</span>
+          <span class="prompt-cursor" id="navbar-cursor">_</span>
+        </a>
+      </div>
+      <ul class="navbar-links">
+        <li><a href="{% url 'blog:post_list' %}" class="nav-link{% if section == 'blog' %} active{% endif %}">[HOME]</a></li>
+        <li><a href="{% url 'blog:post_list' %}" class="nav-link">[POSTY]</a></li>
+        <li class="nav-link-disabled"><span class="nav-link dimmed">[TAGI]</span></li>
+        <li class="nav-link-disabled"><span class="nav-link dimmed">[SZUKAJ]</span></li>
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'admin:index' %}" class="nav-link accent-green">[ADMIN]</a></li>
+        {% else %}
+          <li><a href="{% url 'admin:index' %}" class="nav-link">[login]</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <!-- FLASH MESSAGES -->
+  {% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+    <div class="message message-{{ message.tags }}">
+      <span class="message-prompt">{{ '>>>' }}</span>
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-separator">────────────────────────────────────────────────────────────────────</div>
+    <div class="footer-inner">
+      <span class="footer-text">
+        devlog
+        <span class="footer-sep"> | </span>
+        <a href="#" class="footer-link">RSS</a>
+        <span class="footer-sep"> | </span>
+        <a href="#" class="footer-link">sitemap</a>
+        <span class="footer-sep"> | </span>
+        <span class="footer-year">2026</span>
+      </span>
+      <span class="footer-quote">"Code is poetry, and the terminal is its stage."</span>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/terminal.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

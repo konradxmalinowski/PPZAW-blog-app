@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static blog_tags %}
+
+{% block title %}{{ post.title }} — devlog{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+
+  <!-- MAIN COLUMN -->
+  <div class="posts-column post-detail-column">
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+      <span class="breadcrumb-path">~/blog/posts/{{ post.publish|date:"Y/m/d" }}/{{ post.slug }}$</span>
+      <span class="breadcrumb-cmd"> cat post.md</span>
+    </div>
+
+    <!-- POST HEADER -->
+    <div class="post-detail-header">
+      <div class="post-detail-separator">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</div>
+      <h1 class="post-detail-title">{{ post.title }}</h1>
+      <div class="post-detail-meta">
+        <span class="post-meta-label">autor:</span>
+        <a href="{% url 'blog:post_list_by_author' post.author.username %}" class="post-meta-author">@{{ post.author.username }}</a>
+        <span class="post-meta-sep"> | </span>
+        <span class="post-meta-date">{{ post.publish|date:"Y-m-d" }}</span>
+        {% if post.category %}
+        <span class="post-meta-sep"> | </span>
+        <a href="{{ post.category.get_absolute_url }}" class="post-meta-category" style="color: {{ post.category.color }};">{{ post.category.name }}</a>
+        {% endif %}
+        <span class="post-meta-sep"> | </span>
+        <span class="post-meta-reading reading-progress" data-minutes="{{ post.reading_time }}">
+          {% with rt=post.reading_time %}
+          {% if rt >= 10 %}&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;
+          {% elif rt >= 8 %}&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9617;&#9617;
+          {% elif rt >= 6 %}&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;
+          {% elif rt >= 4 %}&#9608;&#9608;&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;
+          {% elif rt >= 2 %}&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;
+          {% else %}&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;
+          {% endif %}
+          {% endwith %}
+          {{ post.reading_time }} min
+        </span>
+      </div>
+      <div class="post-detail-separator">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</div>
+    </div>
+
+    <!-- COVER IMAGE -->
+    {% if post.cover_image %}
+    <div class="post-cover-image">
+      <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" class="cover-img">
+    </div>
+    {% endif %}
+
+    <!-- POST BODY (Markdown rendered) -->
+    <div class="post-body markdown-content">
+      {{ post.body|markdownify }}
+    </div>
+
+    <!-- TAGS -->
+    {% if post.tags.all %}
+    <div class="post-tags-section">
+      <span class="post-tags-label">tagi:</span>
+      {% for tag in post.tags.all %}
+      <a href="{% url 'blog:post_list_by_tag' tag.slug %}" class="tag">#{{ tag.name }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- SIMILAR POSTS -->
+    {% if similar_posts %}
+    <div class="similar-posts-section">
+      <div class="sidebar-box-header">&#9472;&#9472;[ PODOBNE POSTY ]&#9472;&#9472;</div>
+      <div class="similar-posts-grid">
+        {% for similar in similar_posts %}
+        <div class="post-card similar-card">
+          <div class="post-card-top-border">&#9484;&#9472;[ POST ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
+          <div class="post-card-body">
+            <h4 class="similar-card-title">
+              <a href="{{ similar.get_absolute_url }}" class="post-card-title-link">
+                <span class="post-card-title-prompt">&gt;</span>
+                {{ similar.title|truncatechars:50 }}
+              </a>
+            </h4>
+            <div class="post-card-meta">
+              <span class="post-meta-date">{{ similar.publish|date:"Y-m-d" }}</span>
+              <span class="post-meta-sep"> &middot; </span>
+              <span class="post-meta-reading">{{ similar.reading_time }} min</span>
+            </div>
+          </div>
+          <div class="post-card-bottom-border">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- COMMENTS PLACEHOLDER (Faza 2) -->
+    <div class="comments-section">
+      <div class="sidebar-box-header">&#9472;&#9472;[ KOMENTARZE ]&#9472;&#9472;</div>
+      <div class="comments-placeholder">
+        <span class="accent-yellow">// Komentarze zostana zaimplementowane w Fazie 2.</span><br>
+        <span class="text-secondary">// TODO: CommentForm + CommentAdmin + comment listing</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar-column">
+    {% include "partials/sidebar.html" %}
+  </aside>
+
+</div>
+{% endblock %}
