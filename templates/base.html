@@ -8,9 +8,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/terminal.css' %}">
+  <link rel="alternate" type="application/rss+xml" title="DevLog RSS" href="{% url 'blog:post_feed' %}">
   {% block extra_css %}{% endblock %}
 </head>
 <body>
+<div id="reading-progress" aria-hidden="true"></div>
 
   <!-- NAVBAR -->
   <nav class="navbar" role="navigation" aria-label="Main navigation">
@@ -42,7 +44,7 @@
   {% if messages %}
   <div class="messages-container">
     {% for message in messages %}
-    <div class="message message-{{ message.tags }}">
+    <div class="message message-{{ message.tags }} alert alert-{{ message.tags }}" data-auto-dismiss role="status" aria-live="polite">
       <span class="message-prompt">{{ '>>>' }}</span>
       {{ message }}
     </div>

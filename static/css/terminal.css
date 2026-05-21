@@ -10,6 +10,7 @@
   --bg-card:        #161b22;
   --bg-border:      #30363d;
   --bg-hover:       #1c2128;
+  --bg-card-hover:  #1c2128;
 
   --text-primary:   #c9d1d9;
   --text-secondary: #8b949e;
@@ -1667,4 +1668,91 @@ input[type="password"]:focus {
   .profile-container {
     padding: 0;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PHASE 7 — Terminal UI Polish
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── READING PROGRESS BAR (fixed top, 2px line) ─────────────── */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent-green);
+  width: 0%;
+  transition: width 0.1s linear;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* ─── ALERT / FLASH MESSAGES (alternative classes) ───────────── */
+/* Used alongside .message/.message-success for auto-dismiss JS */
+.alert {
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border-left: 3px solid var(--bg-border);
+  background-color: var(--bg-card);
+  font-size: 0.9em;
+  transition: opacity 0.5s ease;
+}
+
+.alert::before {
+  content: '> ';
+  color: var(--accent-green);
+  font-weight: 700;
+}
+
+.alert-success {
+  border-color: var(--accent-green);
+  background-color: rgba(126, 231, 135, 0.05);
+  color: var(--accent-green);
+}
+
+.alert-error {
+  border-color: var(--accent-red);
+  background-color: rgba(248, 81, 73, 0.05);
+  color: var(--accent-red);
+}
+
+.alert-warning {
+  border-color: var(--accent-yellow);
+  background-color: rgba(210, 153, 34, 0.05);
+  color: var(--accent-yellow);
+}
+
+.alert-info {
+  border-color: var(--accent-blue);
+  background-color: rgba(121, 192, 255, 0.05);
+  color: var(--accent-blue);
+}
+
+/* ─── TAG-LIST alias (matches spec naming) ───────────────────── */
+/* .post-card-tags already handles this; .tag-list is an alias */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+/* ─── SIDEBAR-TITLE alias ────────────────────────────────────── */
+/* .sidebar-box-header already handles this; alias for spec compliance */
+.sidebar-title {
+  color: var(--accent-green);
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--bg-border);
+}
+
+/* ─── SIDEBAR-BOX alias (title variant) ──────────────────────── */
+.sidebar-box .sidebar-title {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--bg);
+  margin: 0;
+  border-bottom: 1px solid var(--bg-border);
 }

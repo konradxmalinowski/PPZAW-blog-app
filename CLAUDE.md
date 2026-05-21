@@ -124,3 +124,17 @@ Zmienne z `.env` przez `python-decouple`. Plik `.env.example` zawiera wszystkie 
 - Markdown body postów — NIGDY nie renderuj bez bleach sanitize
 - Komentarze do kodu: tylko gdy WHY jest nieoczywiste
 - Testy: pytest, plik tests/ w każdej app
+
+## Implementation Status
+
+All 7 phases complete:
+
+| Phase | Feature | Status |
+|---|---|---|
+| 1 | Core blog: Post/Category/Comment models, list/detail views, terminal CSS | ✅ |
+| 2 | Email sharing, comment system, full-text search | ✅ |
+| 3 | Custom template tags, sidebar widgets (recent, most commented, tag cloud) | ✅ |
+| 4 | User accounts: UserProfile, register/login, public profiles | ✅ |
+| 5 | RSS feeds (global + per-category), XML sitemap, robots.txt | ✅ |
+| 6 | DRF REST API: posts, comments, categories, tags, token auth | ✅ |
+| 7 | Terminal UI polish: CSS tokens, JS effects, responsive, JetBrains Mono | ✅ |
