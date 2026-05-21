@@ -1,5 +1,7 @@
 from django.urls import path
+
 from . import views
+from .feeds import CategoryFeed, LatestPostsFeed
 
 app_name = 'blog'
 
@@ -15,4 +17,7 @@ urlpatterns = [
         name='post_detail',
     ),
     path('<int:post_id>/share/', views.post_share, name='post_share'),
+    # RSS Feeds
+    path('feed/', LatestPostsFeed(), name='post_feed'),
+    path('feed/category/<slug:cat_slug>/', CategoryFeed(), name='category_feed'),
 ]
