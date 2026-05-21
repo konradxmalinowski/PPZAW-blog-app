@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}@{{ profile.user.username }} — devlog{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+
+  <!-- PROFIL CARD -->
+  <div class="terminal-box profile-box">
+    <div class="terminal-box-header">
+      <span class="box-tl">┌</span><span class="box-h">─</span><span class="box-label">[ PROFIL ]</span><span class="box-h">──────────────────────────────────────────────</span><span class="box-tr">┐</span>
+    </div>
+
+    <div class="terminal-box-body profile-body">
+      <div class="profile-header">
+        <div class="profile-info">
+          <p class="profile-username">@{{ profile.user.username }}</p>
+
+          {% if profile.user.get_full_name %}
+            <p class="profile-row"><span class="profile-key">Imię:</span> <span class="profile-val">{{ profile.user.get_full_name }}</span></p>
+          {% endif %}
+
+          <p class="profile-row"><span class="profile-key">Email:</span> <span class="profile-val">{{ profile.user.email }}</span></p>
+
+          {% if profile.github_url %}
+            <p class="profile-row">
+              <span class="profile-key">GitHub:</span>
+              <a href="{{ profile.github_url }}" class="terminal-link" target="_blank" rel="noopener">{{ profile.github_url }}</a>
+            </p>
+          {% endif %}
+
+          {% if profile.website %}
+            <p class="profile-row">
+              <span class="profile-key">WWW:</span>
+              <a href="{{ profile.website }}" class="terminal-link" target="_blank" rel="noopener">{{ profile.website }}</a>
+            </p>
+          {% endif %}
+
+          {% if profile.bio %}
+            <div class="profile-bio">
+              <p class="profile-key">Bio:</p>
+              <p class="profile-bio-text">{{ profile.bio }}</p>
+            </div>
+          {% endif %}
+        </div>
+
+        {% if profile.avatar %}
+          <div class="profile-avatar-wrap">
+            <div class="avatar-box">
+              <span class="box-tl">┌</span><span class="box-h">──────────────</span><span class="box-tr">┐</span><br>
+              <span class="box-v">│</span><img src="{{ profile.avatar.url }}" alt="Avatar @{{ profile.user.username }}" class="profile-avatar"><span class="box-v">│</span><br>
+              <span class="box-bl">└</span><span class="box-h">──────────────</span><span class="box-br">┘</span>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="profile-actions">
+        <a href="{% url 'accounts:edit_profile' %}" class="btn-terminal">[EDYTUJ PROFIL]</a>
+      </div>
+    </div>
+
+    <div class="terminal-box-footer">
+      <span class="box-bl">└</span><span class="box-h">─────────────────────────────────────────────────────────────</span><span class="box-br">┘</span>
+    </div>
+  </div>
+
+  <!-- POSTY UŻYTKOWNIKA -->
+  <div class="terminal-box posts-box">
+    <div class="terminal-box-header">
+      <span class="box-tl">┌</span><span class="box-h">─</span><span class="box-label">[ MOJE POSTY ({{ posts.count }}) ]</span><span class="box-h">───────────────────────────────────</span><span class="box-tr">┐</span>
+    </div>
+
+    <div class="terminal-box-body">
+      {% if posts %}
+        <ul class="profile-posts-list">
+          {% for post in posts %}
+            <li class="profile-post-item">
+              <span class="post-arrow">&gt;</span>
+              <a href="{{ post.get_absolute_url }}" class="terminal-link profile-post-title">{{ post.title }}</a>
+              <span class="profile-post-date">[{{ post.publish|date:"Y-m-d" }}]</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="no-posts-msg">> Nie masz jeszcze żadnych opublikowanych postów.</p>
+      {% endif %}
+    </div>
+
+    <div class="terminal-box-footer">
+      <span class="box-bl">└</span><span class="box-h">─────────────────────────────────────────────────────────────</span><span class="box-br">┘</span>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

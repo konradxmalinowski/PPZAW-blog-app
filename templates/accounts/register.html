@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Rejestracja — devlog{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+
+  <div class="terminal-box">
+    <div class="terminal-box-header">
+      <span class="box-tl">┌</span><span class="box-h">─</span><span class="box-label">[ NOWE KONTO ]</span><span class="box-h">──────────────────────────────────────────</span><span class="box-tr">┐</span>
+    </div>
+
+    <div class="terminal-box-body">
+      <p class="auth-prompt">> Wypełnij formularz, aby utworzyć konto</p>
+
+      {% if form.non_field_errors %}
+        <div class="form-errors">
+          {% for error in form.non_field_errors %}
+            <p class="error-line"><span class="error-marker">!</span> {{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post" class="terminal-form">
+        {% csrf_token %}
+
+        <div class="form-field">
+          <label class="field-label">> username:</label>
+          <div class="field-input-wrap">
+            {{ form.username }}
+          </div>
+          {% if form.username.errors %}
+            {% for error in form.username.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">> imię:</label>
+          <div class="field-input-wrap">
+            {{ form.first_name }}
+          </div>
+          {% if form.first_name.errors %}
+            {% for error in form.first_name.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">> nazwisko:</label>
+          <div class="field-input-wrap">
+            {{ form.last_name }}
+          </div>
+          {% if form.last_name.errors %}
+            {% for error in form.last_name.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">> email:</label>
+          <div class="field-input-wrap">
+            {{ form.email }}
+          </div>
+          {% if form.email.errors %}
+            {% for error in form.email.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">> hasło:</label>
+          <div class="field-input-wrap">
+            {{ form.password1 }}
+          </div>
+          {% if form.password1.errors %}
+            {% for error in form.password1.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">> powtórz hasło:</label>
+          <div class="field-input-wrap">
+            {{ form.password2 }}
+          </div>
+          {% if form.password2.errors %}
+            {% for error in form.password2.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-terminal">[>> ZAREJESTRUJ SIĘ ]</button>
+        </div>
+
+      </form>
+
+      <div class="auth-alt-link">
+        <p>> Masz już konto? <a href="{% url 'accounts:login' %}" class="terminal-link">[LOGIN]</a></p>
+      </div>
+    </div>
+
+    <div class="terminal-box-footer">
+      <span class="box-bl">└</span><span class="box-h">─────────────────────────────────────────────────────────────</span><span class="box-br">┘</span>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

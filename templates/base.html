@@ -28,9 +28,11 @@
         <li class="nav-link-disabled"><span class="nav-link dimmed">[TAGI]</span></li>
         <li><a href="{% url 'blog:post_search' %}" class="nav-link{% if section == 'search' %} active{% endif %}">[SZUKAJ]</a></li>
         {% if user.is_authenticated %}
-          <li><a href="{% url 'admin:index' %}" class="nav-link accent-green">[ADMIN]</a></li>
+          <li><a href="{% url 'accounts:profile' %}" class="nav-link accent-green">[@{{ user.username }}]</a></li>
+          <li><a href="{% url 'accounts:logout' %}" class="nav-link">[WYLOGUJ]</a></li>
         {% else %}
-          <li><a href="{% url 'admin:index' %}" class="nav-link">[login]</a></li>
+          <li><a href="{% url 'accounts:login' %}" class="nav-link">[LOGIN]</a></li>
+          <li><a href="{% url 'accounts:register' %}" class="nav-link">[REJESTRACJA]</a></li>
         {% endif %}
       </ul>
     </div>

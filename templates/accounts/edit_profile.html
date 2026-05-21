@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Edytuj profil — devlog{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+
+  <div class="terminal-box">
+    <div class="terminal-box-header">
+      <span class="box-tl">┌</span><span class="box-h">─</span><span class="box-label">[ EDYCJA PROFILU ]</span><span class="box-h">────────────────────────────────────────</span><span class="box-tr">┐</span>
+    </div>
+
+    <div class="terminal-box-body">
+      <p class="auth-prompt">> Zaktualizuj swoje dane</p>
+
+      {% if form.avatar and form.instance.avatar %}
+        <div class="current-avatar">
+          <p class="profile-key">> Aktualna avatara:</p>
+          <img src="{{ form.instance.avatar.url }}" alt="Aktualna avatara" class="profile-avatar-preview">
+        </div>
+      {% endif %}
+
+      <form method="post" enctype="multipart/form-data" class="terminal-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="form-errors">
+            {% for error in form.non_field_errors %}
+              <p class="error-line"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="form-field">
+          <label class="field-label">> imię:</label>
+          <div class="field-input-wrap">
+            {{ form.first_name }}
+          </div>
+          {% if form.first_name.errors %}
+            {% for error in form.first_name.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">> nazwisko:</label>
+          <div class="field-input-wrap">
+            {{ form.last_name }}
+          </div>
+          {% if form.last_name.errors %}
+            {% for error in form.last_name.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">> bio:</label>
+          <div class="field-input-wrap">
+            {{ form.bio }}
+          </div>
+          {% if form.bio.errors %}
+            {% for error in form.bio.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">> avatar:</label>
+          <div class="field-input-wrap">
+            {{ form.avatar }}
+          </div>
+          {% if form.avatar.errors %}
+            {% for error in form.avatar.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">> GitHub URL:</label>
+          <div class="field-input-wrap">
+            {{ form.github_url }}
+          </div>
+          {% if form.github_url.errors %}
+            {% for error in form.github_url.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">> strona WWW:</label>
+          <div class="field-input-wrap">
+            {{ form.website }}
+          </div>
+          {% if form.website.errors %}
+            {% for error in form.website.errors %}
+              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-terminal">[>> ZAPISZ ZMIANY ]</button>
+          <a href="{% url 'accounts:profile' %}" class="btn-terminal btn-secondary">[ANULUJ]</a>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="terminal-box-footer">
+      <span class="box-bl">└</span><span class="box-h">─────────────────────────────────────────────────────────────</span><span class="box-br">┘</span>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
