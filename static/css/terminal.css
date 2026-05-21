@@ -1756,3 +1756,104 @@ input[type="password"]:focus {
   margin: 0;
   border-bottom: 1px solid var(--bg-border);
 }
+
+/* ─── ACCESSIBILITY — WCAG 2.1 AAA ───────────────────────────── */
+
+/* Skip navigation link (WCAG 2.4.1) */
+.skip-link {
+  position: absolute;
+  top: -9999px;
+  left: 0;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: var(--accent-green);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+/* Focus-visible: WCAG 2.4.7 / 2.4.11 AAA — only keyboard focus */
+:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 3px;
+}
+
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Breadcrumb nav */
+.breadcrumb-nav {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0;
+}
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+.breadcrumb-nav a:hover { text-decoration: underline; }
+.breadcrumb-nav .breadcrumb-sep {
+  margin: 0 0.35rem;
+  color: var(--bg-border);
+}
+.breadcrumb-nav .breadcrumb-current {
+  color: var(--text-primary);
+}
+
+/* ─── REDUCED MOTION ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  #reading-progress { display: none; }
+}
+
+/* ─── PRINT STYLES ───────────────────────────────────────────── */
+@media print {
+  :root {
+    --bg: #fff;
+    --bg-card: #f6f8fa;
+    --bg-border: #d0d7de;
+    --text-primary: #1f2328;
+    --text-secondary: #656d76;
+    --accent-green: #1a7f37;
+    --accent-blue: #0969da;
+  }
+  .navbar, .sidebar, .comments-section, #reading-progress,
+  .post-share, .post-tags-section, .skip-link { display: none !important; }
+  body { font-size: 12pt; }
+  a::after { content: " (" attr(href) ")"; font-size: 0.8em; color: var(--text-secondary); }
+  .post-card { break-inside: avoid; page-break-inside: avoid; }
+  h1, h2, h3 { page-break-after: avoid; }
+}

@@ -96,6 +96,65 @@
     }
   }
 
+  // ── Lazy-load images (IntersectionObserver with native fallback) ──
+  function initLazyLoading() {
+    var lazyImgs = [].slice.call(document.querySelectorAll('img[data-src]'));
+    if (!lazyImgs.length) return;
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var img = entry.target;
+            img.src = img.dataset.src;
+            if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+            img.removeAttribute('data-src');
+            obs.unobserve(img);
+          }
+        });
+      }, { rootMargin: '200px 0px' });
+      lazyImgs.forEach(function (img) { obs.observe(img); });
+    } else {
+      lazyImgs.forEach(function (img) {
+        img.src = img.dataset.src;
+        if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+      });
+    }
+  }
+
+  // ── Prefetch internal links on hover (speed perception) ────────
+  function initPrefetch() {
+    if (!('prefetch' in document.createElement('link').relList)) return;
+    var prefetched = new Set();
+    document.addEventListener('mouseover', function (e) {
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      var href = a.href;
+      if (!href || href.startsWith('#') || prefetched.has(href)) return;
+      if (a.hostname !== location.hostname) return;
+      prefetched.add(href);
+      var link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = href;
+      document.head.appendChild(link);
+    });
+  }
+
+  // ── External links — noopener + accessible label ────────────────
+  function initExternalLinks() {
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      if (a.hostname && a.hostname !== location.hostname) {
+        a.setAttribute('rel', 'noopener noreferrer');
+        if (!a.getAttribute('target')) a.setAttribute('target', '_blank');
+        if (!a.querySelector('.sr-only')) {
+          var hint = document.createElement('span');
+          hint.className = 'sr-only';
+          hint.textContent = ' (otwiera się w nowej karcie)';
+          a.appendChild(hint);
+        }
+      }
+    });
+  }
+
   // ── Init ──────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
     initReadingProgress();
@@ -103,6 +162,9 @@
     initMessages();
     initSmoothScroll();
     initNavBrand();
+    initLazyLoading();
+    initPrefetch();
+    initExternalLinks();
   });
 
 })();
