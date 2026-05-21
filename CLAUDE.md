@@ -8,7 +8,7 @@ Django blog z terminal-style UI. Każdy post dokumentuje jeden etap cyklu tworze
 
 ## Stack
 
-- Python 3.14, Django 4.2 LTS
+- Python 3.14, Django 5.2 (4.2 LTS nie obsługuje Python 3.14)
 - SQLite (dev) — PostgreSQL-ready
 - django-taggit, djangorestframework, django-markdownx, Pillow, bleach, python-decouple
 - Terminal CSS (własny) + Vanilla JS
