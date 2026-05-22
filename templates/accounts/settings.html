@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Ustawienia konta — devlog{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+
+  <div class="terminal-box profile-box">
+    <div class="terminal-box-header">Ustawienia konta</div>
+    <div class="terminal-box-body">
+
+      <div class="settings-section">
+        <h2 class="settings-section-title">Konto</h2>
+        <div class="settings-row">
+          <div class="settings-info">
+            <span class="settings-label">Hasło</span>
+            <span class="settings-desc">Zmień hasło do konta</span>
+          </div>
+          <a href="{% url 'accounts:change_password' %}" class="btn-terminal btn-sm">Zmień hasło</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-info">
+            <span class="settings-label">E-mail</span>
+            <span class="settings-desc">{{ request.user.email|default:"nie podano" }}</span>
+          </div>
+          <a href="{% url 'accounts:change_email' %}" class="btn-terminal btn-sm">Zmień e-mail</a>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h2 class="settings-section-title">Weryfikacja dwuetapowa (2FA)</h2>
+        {% if profile.two_factor_enabled %}
+        <div class="settings-row">
+          <div class="settings-info">
+            <span class="settings-label settings-label-active">2FA aktywna</span>
+            <span class="settings-desc">Twoje konto jest chronione kodem TOTP z aplikacji uwierzytelniającej.</span>
+          </div>
+          <a href="{% url 'accounts:disable_2fa' %}" class="btn-terminal btn-sm btn-danger">Wyłącz 2FA</a>
+        </div>
+        {% else %}
+        <div class="settings-row">
+          <div class="settings-info">
+            <span class="settings-label">2FA wyłączona</span>
+            <span class="settings-desc">Włącz weryfikację dwuetapową, by lepiej chronić konto.</span>
+          </div>
+          <a href="{% url 'accounts:setup_2fa' %}" class="btn-terminal btn-sm">Włącz 2FA</a>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="settings-section">
+        <h2 class="settings-section-title">Profil</h2>
+        <div class="settings-row">
+          <div class="settings-info">
+            <span class="settings-label">Edycja profilu</span>
+            <span class="settings-desc">Bio, avatar, linki</span>
+          </div>
+          <a href="{% url 'accounts:edit_profile' %}" class="btn-terminal btn-sm">Edytuj profil</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

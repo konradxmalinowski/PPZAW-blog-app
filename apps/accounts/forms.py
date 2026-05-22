@@ -1,7 +1,35 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from apps.accounts.models import UserProfile
+
+
+class ChangeEmailForm(forms.Form):
+    email = forms.EmailField(label='Nowy e-mail')
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.exclude(pk=self.user.pk).filter(email=email).exists():
+            raise forms.ValidationError('Ten adres e-mail jest już zajęty.')
+        return email
+
+    def save(self):
+        self.user.email = self.cleaned_data['email']
+        self.user.save()
+        return self.user
+
+
+class TOTPVerifyForm(forms.Form):
+    code = forms.CharField(
+        max_length=6,
+        min_length=6,
+        label='Kod weryfikacyjny',
+        widget=forms.TextInput(attrs={'autocomplete': 'one-time-code', 'inputmode': 'numeric', 'pattern': '[0-9]*'}),
+    )
 
 
 class RegisterForm(UserCreationForm):

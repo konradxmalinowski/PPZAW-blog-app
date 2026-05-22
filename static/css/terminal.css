@@ -1360,6 +1360,9 @@ input[type="password"]:focus {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid var(--bg-border);
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .profile-avatar-wrap {
@@ -1577,6 +1580,102 @@ select:focus-visible {
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-lime); }
+
+.btn-sm {
+  padding: 0.25rem 0.7rem;
+  font-size: 0.78em;
+}
+
+.btn-danger {
+  border-color: var(--accent-error);
+  color: var(--accent-error);
+}
+
+.btn-danger:hover {
+  background: rgba(255, 68, 68, 0.08);
+  color: var(--accent-error);
+}
+
+.settings-section {
+  border-bottom: 1px solid var(--bg-border);
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.settings-section-title {
+  font-size: 0.82em;
+  font-weight: 700;
+  color: var(--accent-green);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+}
+
+.settings-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.settings-label {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.settings-label-active {
+  color: var(--accent-lime);
+}
+
+.settings-desc {
+  font-size: 0.82em;
+  color: var(--text-secondary);
+}
+
+.twofa-qr-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.twofa-qr {
+  border: 4px solid #fff;
+  border-radius: 4px;
+  image-rendering: pixelated;
+}
+
+.twofa-secret-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.twofa-secret {
+  background: var(--bg);
+  border: 1px solid var(--bg-border);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+  color: var(--accent-green);
+  letter-spacing: 0.05em;
+  word-break: break-all;
+}
 
 @media print {
   :root {

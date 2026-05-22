@@ -10,6 +10,8 @@ class UserProfile(models.Model):
     avatar = models.ImageField(upload_to='avatars/', blank=True)
     github_url = models.URLField(blank=True)
     website = models.URLField(blank=True)
+    totp_secret = models.CharField(max_length=32, blank=True)
+    two_factor_enabled = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'User Profile'
