@@ -45,7 +45,14 @@
 
         <div class="form-field">
           <label class="field-label" for="{{ form.password1.id_for_label }}">Hasło</label>
-          <div class="field-input-wrap">{{ form.password1 }}</div>
+          <div class="field-input-wrap" style="display:flex;gap:0.5rem;align-items:center;">
+            {{ form.password1 }}
+            <button type="button" id="gen-password" class="btn-terminal btn-sm" style="white-space:nowrap;">Generuj</button>
+          </div>
+          <div id="gen-hint" style="display:none;margin-top:0.4rem;font-size:0.82em;color:var(--text-secondary);">
+            Hasło: <span id="gen-value" style="color:var(--accent-green);font-weight:600;letter-spacing:0.05em;"></span>
+            <button type="button" id="copy-password" class="btn-terminal btn-sm" style="margin-left:0.5rem;font-size:0.78em;">Kopiuj</button>
+          </div>
           {% for error in form.password1.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
         </div>
 
@@ -66,4 +73,48 @@
     </div>
   </div>
 </div>
+
+<script>
+(function () {
+  const btn = document.getElementById('gen-password');
+  const p1  = document.getElementById('{{ form.password1.id_for_label }}');
+  const p2  = document.getElementById('{{ form.password2.id_for_label }}');
+  const hint = document.getElementById('gen-hint');
+  const val  = document.getElementById('gen-value');
+  const copy = document.getElementById('copy-password');
+
+  function generate() {
+    const upper  = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    const lower  = 'abcdefghjkmnpqrstuvwxyz';
+    const digits = '23456789';
+    const special = '!@#$%^&*';
+    const all = upper + lower + digits + special;
+    const arr = new Uint8Array(16);
+    crypto.getRandomValues(arr);
+    let pwd = upper[arr[0] % upper.length]
+            + lower[arr[1] % lower.length]
+            + digits[arr[2] % digits.length]
+            + special[arr[3] % special.length];
+    for (let i = 4; i < 16; i++) pwd += all[arr[i] % all.length];
+    return pwd.split('').sort(() => crypto.getRandomValues(new Uint8Array(1))[0] - 128).join('');
+  }
+
+  btn.addEventListener('click', () => {
+    const pwd = generate();
+    p1.value = pwd;
+    p2.value = pwd;
+    p1.type = 'text';
+    p2.type = 'text';
+    val.textContent = pwd;
+    hint.style.display = 'block';
+  });
+
+  copy.addEventListener('click', () => {
+    navigator.clipboard.writeText(val.textContent).then(() => {
+      copy.textContent = 'Skopiowano!';
+      setTimeout(() => { copy.textContent = 'Kopiuj'; }, 2000);
+    });
+  });
+})();
+</script>
 {% endblock %}

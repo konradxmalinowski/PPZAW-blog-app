@@ -123,6 +123,10 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@devlog.local')
 
+SUPERUSER_USERNAME = config('SUPERUSER_USERNAME', default='')
+SUPERUSER_EMAIL = config('SUPERUSER_EMAIL', default='')
+SUPERUSER_PASSWORD = config('SUPERUSER_PASSWORD', default='')
+
 # === SEO & Site Settings ===
 SITE_NAME = 'DevLog'
 SITE_URL = 'https://devlog.example.com'
