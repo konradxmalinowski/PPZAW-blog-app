@@ -6,36 +6,36 @@
 
 /* ─── CSS VARIABLES ─────────────────────────────────────────── */
 :root {
-  --bg:             #0a0f0a;
-  --bg-card:        #0f1a0f;
-  --bg-border:      #1e3d1e;
-  --bg-hover:       #152615;
-  --bg-card-hover:  #152615;
+  --bg:             #0d1117;
+  --bg-card:        #161b22;
+  --bg-border:      #1e3d1e;       /* zielony border */
+  --bg-hover:       #1c2b1c;
+  --bg-card-hover:  #1c2b1c;
 
-  --text-primary:   #b5f0b5;
-  --text-secondary: #6db86d;
-  --text-muted:     #3d7a3d;
+  --text-primary:   #e0e0e0;       /* biały tekst — czytelny */
+  --text-secondary: #9e9e9e;
+  --text-muted:     #5a5a5a;
 
-  --accent-green:   #00ff41;
+  --accent-green:   #00ff41;       /* Matrix neon — nagłówki i akcenty */
   --accent-lime:    #39d353;
-  --accent-blue:    #58d68d;   /* kept for template compatibility — value updated to matrix green */
+  --accent-blue:    #58d68d;       /* linki — miękka zieleń */
   --accent-warn:    #ffd700;
   --accent-error:   #ff4444;
-  --accent-yellow:  #ffd700;   /* alias so existing references still compile */
-  --accent-red:     #ff4444;   /* alias so existing references still compile */
-  --accent-purple:  #39d353;   /* remapped to accent-lime for matrix look */
+  --accent-yellow:  #ffd700;
+  --accent-red:     #ff4444;
+  --accent-purple:  #39d353;
 
-  --glow-green:        0 0 8px rgba(0, 255, 65, 0.25);
-  --glow-green-strong: 0 0 14px rgba(0, 255, 65, 0.45);
+  --glow-green:        0 0 8px rgba(0, 255, 65, 0.2);
+  --glow-green-strong: 0 0 14px rgba(0, 255, 65, 0.4);
 
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-  --font-size: 14px;
-  --line-height: 1.65;
+  --font-size: 15px;
+  --line-height: 1.75;
 
-  --radius: 2px;
+  --radius: 4px;
   --transition: 0.15s ease;
 
-  --navbar-height: 52px;
+  --navbar-height: 56px;
   --content-max-width: 1100px;
   --sidebar-width: 260px;
 }
@@ -104,43 +104,23 @@ ul, ol {
   gap: 1rem;
 }
 
-.navbar-prompt {
-  flex-shrink: 0;
-}
-
-.prompt-link {
+.navbar-brand {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 0;
-  color: var(--text-primary);
-  font-weight: 600;
-  font-size: 1em;
+  gap: 0.25rem;
+  flex-shrink: 0;
 }
-
-.prompt-link:hover {
-  color: var(--text-primary);
-}
-
-.prompt-bracket {
-  color: var(--text-secondary);
-}
-
-.prompt-tilde {
-  color: var(--accent-blue);
-}
-
-.prompt-text {
+.navbar-brand:hover {
   color: var(--accent-green);
+  text-shadow: var(--glow-green);
 }
-
-.prompt-cursor {
+.brand-bracket {
   color: var(--accent-green);
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
+  font-weight: 900;
 }
 
 .navbar-links {
@@ -151,31 +131,32 @@ ul, ol {
 
 .nav-link {
   color: var(--text-secondary);
-  padding: 0.3rem 0.5rem;
+  padding: 0.35rem 0.75rem;
   border-radius: var(--radius);
-  font-size: 0.85em;
+  font-size: 0.9em;
   font-weight: 500;
   transition: color var(--transition), background-color var(--transition);
+  text-decoration: none;
 }
-
 .nav-link:hover,
 .nav-link.active {
   color: var(--accent-green);
   background-color: var(--bg-hover);
+  text-shadow: none;
 }
-
-.nav-link.accent-green {
+.nav-link-user {
+  color: var(--accent-lime);
+}
+.nav-link-user:hover {
   color: var(--accent-green);
 }
-
-.nav-link.dimmed {
-  color: var(--text-muted);
-  cursor: not-allowed;
+.nav-link-cta {
+  border: 1px solid var(--accent-green);
+  color: var(--accent-green);
+  padding: 0.3rem 0.75rem;
 }
-
-.nav-link.dimmed:hover {
-  color: var(--text-muted);
-  background: none;
+.nav-link-cta:hover {
+  background: rgba(0, 255, 65, 0.08);
 }
 
 /* ─── FLASH MESSAGES ─────────────────────────────────────────── */
@@ -487,13 +468,14 @@ ul, ol {
 }
 
 .sidebar-box-header {
-  padding: 0.5rem 0.75rem;
-  background-color: var(--bg);
+  padding: 0.6rem 0.75rem;
+  background-color: transparent;
   border-bottom: 1px solid var(--bg-border);
-  color: var(--accent-green);
-  font-size: 0.78em;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  font-size: 0.75em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .sidebar-box-body {
@@ -616,7 +598,7 @@ ul, ol {
 /* ─── MARKDOWN BODY ──────────────────────────────────────────── */
 .markdown-content {
   font-size: 1rem;
-  line-height: 1.85;
+  line-height: 1.8;
   letter-spacing: 0.01em;
   color: var(--text-primary);
   margin-bottom: 2rem;
@@ -794,14 +776,6 @@ ul, ol {
 .footer {
   border-top: 1px solid var(--bg-border);
   margin-top: auto;
-}
-
-.footer-separator {
-  color: var(--bg-border);
-  font-size: 0.75em;
-  overflow: hidden;
-  white-space: nowrap;
-  padding: 0 1.5rem;
 }
 
 .footer-inner {

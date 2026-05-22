@@ -107,12 +107,6 @@
       </ol>
     </nav>
 
-    <!-- Terminal-style path (visual) -->
-    <div class="breadcrumb-terminal" aria-hidden="true">
-      <span class="breadcrumb-path">~/blog/posts/{{ post.publish|date:"Y/m/d" }}/{{ post.slug }}$</span>
-      <span class="breadcrumb-cmd"> cat post.md</span>
-    </div>
-
     <!-- POST HEADER -->
     <div class="post-detail-header">
       <div class="post-detail-separator">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</div>
@@ -180,7 +174,7 @@
     <!-- SIMILAR POSTS -->
     {% if similar_posts %}
     <div class="similar-posts-section">
-      <div class="sidebar-box-header">&#9472;&#9472;[ PODOBNE POSTY ]&#9472;&#9472;</div>
+      <div class="sidebar-box-header">Podobne posty</div>
       <div class="similar-posts-grid">
         {% for similar in similar_posts %}
         <div class="post-card similar-card">

@@ -91,24 +91,18 @@
   <!-- NAVBAR -->
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="navbar-inner">
-      <div class="navbar-prompt">
-        <a href="{% url 'blog:post_list' %}" class="prompt-link">
-          <span class="prompt-bracket">[</span><span class="prompt-tilde">~</span><span class="prompt-bracket">]</span>
-          <span class="prompt-text"> devlog$</span>
-          <span class="prompt-cursor" id="navbar-cursor">_</span>
-        </a>
-      </div>
+      <a href="{% url 'blog:post_list' %}" class="navbar-brand">
+        <span class="brand-bracket">&gt;</span> DevLog
+      </a>
       <ul class="navbar-links">
-        <li><a href="{% url 'blog:post_list' %}" class="nav-link{% if section == 'blog' %} active{% endif %}">[HOME]</a></li>
-        <li><a href="{% url 'blog:post_list' %}" class="nav-link">[POSTY]</a></li>
-        <li class="nav-link-disabled"><span class="nav-link dimmed">[TAGI]</span></li>
-        <li><a href="{% url 'blog:post_search' %}" class="nav-link{% if section == 'search' %} active{% endif %}">[SZUKAJ]</a></li>
+        <li><a href="{% url 'blog:post_list' %}" class="nav-link{% if section == 'blog' %} active{% endif %}">Blog</a></li>
+        <li><a href="{% url 'blog:post_search' %}" class="nav-link{% if section == 'search' %} active{% endif %}">Szukaj</a></li>
         {% if user.is_authenticated %}
-          <li><a href="{% url 'accounts:profile' %}" class="nav-link accent-green">[@{{ user.username }}]</a></li>
-          <li><a href="{% url 'accounts:logout' %}" class="nav-link">[WYLOGUJ]</a></li>
+          <li><a href="{% url 'accounts:profile' %}" class="nav-link nav-link-user">{{ user.username }}</a></li>
+          <li><a href="{% url 'accounts:logout' %}" class="nav-link">Wyloguj</a></li>
         {% else %}
-          <li><a href="{% url 'accounts:login' %}" class="nav-link">[LOGIN]</a></li>
-          <li><a href="{% url 'accounts:register' %}" class="nav-link">[REJESTRACJA]</a></li>
+          <li><a href="{% url 'accounts:login' %}" class="nav-link">Logowanie</a></li>
+          <li><a href="{% url 'accounts:register' %}" class="nav-link nav-link-cta">Rejestracja</a></li>
         {% endif %}
       </ul>
     </div>
@@ -133,7 +127,6 @@
 
   <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer-separator">────────────────────────────────────────────────────────────────────</div>
     <div class="footer-inner">
       <span class="footer-text">
         devlog

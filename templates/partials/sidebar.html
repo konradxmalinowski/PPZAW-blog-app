@@ -5,7 +5,7 @@ Sidebar: recent posts (inclusion tag), categories (context_processor), tag cloud
 
 <!-- RECENT POSTS -->
 <div class="sidebar-box">
-  <div class="sidebar-box-header">&#9472;&#9472;[ OSTATNIE POSTY ]&#9472;&#9472;</div>
+  <div class="sidebar-box-header">Ostatnie posty</div>
   <div class="sidebar-box-body">
     {% show_recent_posts 5 %}
   </div>
@@ -13,7 +13,7 @@ Sidebar: recent posts (inclusion tag), categories (context_processor), tag cloud
 
 <!-- NAJKOMENTOWANSZE -->
 <div class="sidebar-box">
-  <div class="sidebar-box-header">&#9472;&#9472;[ NAJKOMENTOWANSZE ]&#9472;&#9472;</div>
+  <div class="sidebar-box-header">Najkomentowansze</div>
   <div class="sidebar-box-body">
     {% show_most_commented 5 %}
   </div>
@@ -21,7 +21,7 @@ Sidebar: recent posts (inclusion tag), categories (context_processor), tag cloud
 
 <!-- CATEGORIES -->
 <div class="sidebar-box">
-  <div class="sidebar-box-header">&#9472;&#9472;[ KATEGORIE ]&#9472;&#9472;</div>
+  <div class="sidebar-box-header">Kategorie</div>
   <div class="sidebar-box-body">
     {% for cat in categories %}
     <div class="sidebar-category-item">
@@ -38,7 +38,7 @@ Sidebar: recent posts (inclusion tag), categories (context_processor), tag cloud
 
 <!-- TAG CLOUD -->
 <div class="sidebar-box">
-  <div class="sidebar-box-header">&#9472;&#9472;[ TAG CLOUD ]&#9472;&#9472;</div>
+  <div class="sidebar-box-header">Tagi</div>
   <div class="sidebar-box-body sidebar-tags">
     {% show_tag_cloud %}
   </div>
