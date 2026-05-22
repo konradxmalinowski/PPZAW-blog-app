@@ -11,16 +11,15 @@
 
     <!-- FILTER HEADER -->
     <div class="filter-header">
-      <span class="filter-prompt">$</span>
-      <span class="filter-cmd"> ls ./posts/ | grep -i </span>
-      <span class="filter-arg">"{{ category.name }}"</span>
-      <span class="filter-meta"> | {{ posts.paginator.count|default:"0" }} wpisow</span>
+      <span class="filter-label">Posty w kategorii:</span>
+      <span class="filter-value">{{ category.name }}</span>
+      <span class="filter-meta">{{ posts.paginator.count|default:"0" }} wpisów</span>
     </div>
 
     {% if category.description %}
     <div class="category-description sidebar-box" style="margin-bottom: 1.5rem;">
       <div class="sidebar-box-header" style="color: {{ category.color }};">
-        &#9472;&#9472;[ {{ category.name|upper }} ]&#9472;&#9472;
+        {{ category.name }}
       </div>
       <div class="sidebar-box-body">
         <p>{{ category.description }}</p>
@@ -31,15 +30,9 @@
     <!-- POST CARDS -->
     {% for post in posts %}
     <article class="post-card">
-      <div class="post-card-top-border">
-        &#9484;&#9472;[ POST ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
-      </div>
       <div class="post-card-body">
         <h2 class="post-card-title">
-          <a href="{{ post.get_absolute_url }}" class="post-card-title-link">
-            <span class="post-card-title-prompt">&gt;</span>
-            {{ post.title }}
-          </a>
+          <a href="{{ post.get_absolute_url }}" class="post-card-title-link">{{ post.title }}</a>
         </h2>
 
         <div class="post-card-meta">
@@ -47,9 +40,7 @@
           <span class="post-meta-sep"> &middot; </span>
           <a href="{% url 'blog:post_list_by_author' post.author.username %}" class="post-meta-author">@{{ post.author.username }}</a>
           <span class="post-meta-sep"> &middot; </span>
-          <span class="post-meta-reading">
-            {{ post.reading_time|reading_bar }} {{ post.reading_time }} min
-          </span>
+          <span class="post-meta-reading">{{ post.reading_time }} min</span>
         </div>
 
         {% if post.tags.all %}
@@ -65,23 +56,16 @@
         {% endif %}
 
         <div class="post-card-footer">
-          <a href="{{ post.get_absolute_url }}" class="read-more-btn">[&gt;&gt; CZYTAJ DALEJ ]</a>
+          <a href="{{ post.get_absolute_url }}" class="read-more-btn">Czytaj dalej →</a>
         </div>
-      </div>
-      <div class="post-card-bottom-border">
-        &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
       </div>
     </article>
     {% empty %}
-    <div class="post-card empty-state">
-      <div class="post-card-top-border">&#9484;&#9472;[ OUTPUT ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
-      <div class="post-card-body">
-        <p class="empty-msg">
-          <span class="accent-yellow">// brak postow w kategorii "{{ category.name }}"</span><br>
-          <span class="accent-green">&gt;</span> Dodaj pierwszy post przez <a href="{% url 'admin:index' %}" class="link-blue">panel admina</a>.
-        </p>
+    <div class="post-card">
+      <div class="post-card-body empty-state">
+        <p class="empty-msg">Brak postów w kategorii „{{ category.name }}".</p>
+        <a href="{% url 'admin:index' %}" class="btn-terminal">Panel admina</a>
       </div>
-      <div class="post-card-bottom-border">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
     </div>
     {% endfor %}
 

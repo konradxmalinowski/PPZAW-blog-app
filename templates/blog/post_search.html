@@ -9,33 +9,20 @@
   <!-- MAIN COLUMN -->
   <div class="posts-column">
 
-    <!-- BREADCRUMB -->
-    <div class="breadcrumb">
-      <span class="breadcrumb-path">~/blog$</span>
-      <span class="breadcrumb-cmd"> grep -r "{% if query %}{{ query }}{% else %}...{% endif %}" ./posts/</span>
-    </div>
-
     <!-- SEARCH BOX -->
     <div class="terminal-box search-box">
-      <div class="terminal-box-header">
-        &#9484;&#9472;[ SZUKAJ ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
-      </div>
+      <div class="terminal-box-header">Wyszukaj post</div>
       <div class="terminal-box-body">
         <form method="get" action="" class="search-form">
           <div class="form-field search-field">
-            <label for="{{ form.query.id_for_label }}" class="form-label">
-              <span class="accent-green">$</span> grep -r
-            </label>
+            <label for="{{ form.query.id_for_label }}" class="form-label">Szukaj:</label>
             {{ form.query }}
-            <button type="submit" class="btn-terminal search-submit">[ SZUKAJ ]</button>
+            <button type="submit" class="btn-terminal search-submit">Szukaj</button>
           </div>
           {% if form.query.errors %}
             <div class="form-error">{{ form.query.errors }}</div>
           {% endif %}
         </form>
-      </div>
-      <div class="terminal-box-footer">
-        &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
       </div>
     </div>
 
@@ -45,57 +32,39 @@
 
       {% if results %}
         <div class="search-results-header">
-          <span class="text-muted">// Znaleziono</span>
-          <span class="accent-green"> {{ results.count }}</span>
-          <span class="text-muted"> post{% if results.count != 1 %}ów{% endif %} dla </span>
-          <span class="accent-yellow">"{{ query }}"</span><span class="text-muted">:</span>
+          Znaleziono <strong>{{ results.count }}</strong> post{% if results.count != 1 %}ów{% endif %} dla „{{ query }}"
         </div>
 
         <div class="search-results-list">
           {% for post in results %}
-          <div class="post-card search-result-card">
-            <div class="post-card-top-border">&#9484;&#9472;[ WYNIK ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
+          <article class="post-card search-result-card">
             <div class="post-card-body">
               <h3 class="post-card-title">
-                <a href="{{ post.get_absolute_url }}" class="post-card-title-link">
-                  <span class="post-card-title-prompt">&gt;</span>
-                  {{ post.title }}
-                </a>
+                <a href="{{ post.get_absolute_url }}" class="post-card-title-link">{{ post.title }}</a>
               </h3>
               <div class="post-card-meta">
-                <span class="post-meta-label">autor:</span>
                 <a href="{% url 'blog:post_list_by_author' post.author.username %}" class="post-meta-author">@{{ post.author.username }}</a>
-                <span class="post-meta-sep"> | </span>
-                <span class="post-meta-date">{{ post.publish|date:"Y-m-d" }}</span>
-                <span class="post-meta-sep"> | </span>
+                <span class="post-meta-sep"> &middot; </span>
+                <time class="post-meta-date" datetime="{{ post.publish|date:'c' }}">{{ post.publish|date:"Y-m-d" }}</time>
+                <span class="post-meta-sep"> &middot; </span>
                 <span class="post-meta-reading">{{ post.reading_time }} min</span>
               </div>
               {% if post.excerpt %}
               <p class="post-card-excerpt">{{ post.excerpt|truncatechars:200 }}</p>
               {% endif %}
               <div class="post-card-footer">
-                <a href="{{ post.get_absolute_url }}" class="read-more-btn">[&gt;&gt; CZYTAJ ]</a>
+                <a href="{{ post.get_absolute_url }}" class="read-more-btn">Czytaj →</a>
               </div>
             </div>
-            <div class="post-card-bottom-border">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
-          </div>
+          </article>
           {% endfor %}
         </div>
 
       {% else %}
-        <div class="search-no-results">
-          <div class="post-card">
-            <div class="post-card-top-border">&#9484;&#9472;[ WYNIKI ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
-            <div class="post-card-body empty-state">
-              <p class="empty-msg">
-                <span class="accent-red">&gt; ERROR:</span>
-                <span class="text-secondary"> grep: brak wynikow dla </span>
-                <span class="accent-yellow">"{{ query }}"</span><br>
-                <span class="text-muted">// Sprobuj innej frazy lub przejrzyj wszystkie posty.</span>
-              </p>
-              <a href="{% url 'blog:post_list' %}" class="btn-terminal">[ WSZYSTKIE POSTY ]</a>
-            </div>
-            <div class="post-card-bottom-border">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
+        <div class="post-card">
+          <div class="post-card-body empty-state">
+            <p class="empty-msg">Brak wyników dla „{{ query }}". Spróbuj innej frazy.</p>
+            <a href="{% url 'blog:post_list' %}" class="btn-terminal">Wszystkie posty</a>
           </div>
         </div>
       {% endif %}

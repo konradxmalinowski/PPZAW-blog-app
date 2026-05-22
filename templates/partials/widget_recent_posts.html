@@ -1,9 +1,6 @@
 {% for post in recent_posts %}
 <div class="sidebar-post-item">
-  <a href="{{ post.get_absolute_url }}" class="sidebar-post-link">
-    <span class="sidebar-prompt">&gt;</span>
-    {{ post.title|truncatechars:42 }}
-  </a>
+  <a href="{{ post.get_absolute_url }}" class="sidebar-post-link">{{ post.title|truncatechars:42 }}</a>
   <span class="sidebar-meta">{{ post.publish|date:"Y-m-d" }}</span>
 </div>
 {% empty %}

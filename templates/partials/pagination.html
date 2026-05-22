@@ -2,21 +2,20 @@
 <nav class="pagination" aria-label="Paginacja">
   <div class="pagination-inner">
     {% if page_obj.has_previous %}
-      <a href="?page={{ page_obj.previous_page_number }}" class="pagination-btn pagination-prev">[&lt; POPRZEDNIA]</a>
+      <a href="?page={{ page_obj.previous_page_number }}" class="pagination-btn pagination-prev">← Poprzednia</a>
     {% else %}
-      <span class="pagination-btn pagination-disabled">[&lt; POPRZEDNIA]</span>
+      <span class="pagination-btn pagination-disabled">← Poprzednia</span>
     {% endif %}
 
     <span class="pagination-info">
       strona <span class="pagination-current">{{ page_obj.number }}</span>
-      z
-      <span class="pagination-total">{{ page_obj.paginator.num_pages }}</span>
+      z <span class="pagination-total">{{ page_obj.paginator.num_pages }}</span>
     </span>
 
     {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}" class="pagination-btn pagination-next">[NASTEPNA &gt;]</a>
+      <a href="?page={{ page_obj.next_page_number }}" class="pagination-btn pagination-next">Następna →</a>
     {% else %}
-      <span class="pagination-btn pagination-disabled">[NASTEPNA &gt;]</span>
+      <span class="pagination-btn pagination-disabled">Następna →</span>
     {% endif %}
   </div>
 </nav>

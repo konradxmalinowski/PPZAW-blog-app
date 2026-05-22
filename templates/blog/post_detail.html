@@ -95,7 +95,6 @@
 
     <!-- POST HEADER -->
     <div class="post-detail-header">
-      <div class="post-detail-separator">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</div>
       <h1 class="post-detail-title">{{ post.title }}</h1>
       <div class="post-detail-meta">
         <span class="post-meta-label">autor:</span>
@@ -107,20 +106,8 @@
         <a href="{{ post.category.get_absolute_url }}" class="post-meta-category" style="color: {{ post.category.color }};">{{ post.category.name }}</a>
         {% endif %}
         <span class="post-meta-sep"> | </span>
-        <span class="post-meta-reading reading-progress" data-minutes="{{ post.reading_time }}">
-          {% with rt=post.reading_time %}
-          {% if rt >= 10 %}&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;
-          {% elif rt >= 8 %}&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9617;&#9617;
-          {% elif rt >= 6 %}&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;
-          {% elif rt >= 4 %}&#9608;&#9608;&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;
-          {% elif rt >= 2 %}&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;
-          {% else %}&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;
-          {% endif %}
-          {% endwith %}
-          {{ post.reading_time }} min
-        </span>
+        <span class="post-meta-reading" data-minutes="{{ post.reading_time }}">{{ post.reading_time }} min</span>
       </div>
-      <div class="post-detail-separator">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</div>
     </div>
 
     <!-- COVER IMAGE — eager for LCP (above fold), explicit dimensions hint -->
@@ -152,9 +139,7 @@
 
     <!-- SHARE LINK -->
     <div class="post-share-link">
-      <a href="{% url 'blog:post_share' post.id %}" class="share-btn">
-        <span class="share-prompt">&gt;</span> [>> UDOSTEPNIJ POST ]
-      </a>
+      <a href="{% url 'blog:post_share' post.id %}" class="share-btn">Udostępnij post</a>
     </div>
 
     <!-- SIMILAR POSTS -->
@@ -164,13 +149,9 @@
       <div class="similar-posts-grid">
         {% for similar in similar_posts %}
         <div class="post-card similar-card">
-          <div class="post-card-top-border">&#9484;&#9472;[ POST ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
           <div class="post-card-body">
             <h4 class="similar-card-title">
-              <a href="{{ similar.get_absolute_url }}" class="post-card-title-link">
-                <span class="post-card-title-prompt">&gt;</span>
-                {{ similar.title|truncatechars:50 }}
-              </a>
+              <a href="{{ similar.get_absolute_url }}" class="post-card-title-link">{{ similar.title|truncatechars:50 }}</a>
             </h4>
             <div class="post-card-meta">
               <span class="post-meta-date">{{ similar.publish|date:"Y-m-d" }}</span>
@@ -178,7 +159,6 @@
               <span class="post-meta-reading">{{ similar.reading_time }} min</span>
             </div>
           </div>
-          <div class="post-card-bottom-border">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
         </div>
         {% endfor %}
       </div>
@@ -199,48 +179,37 @@
 
       <!-- List of existing comments -->
       <div class="comments-box">
-        <div class="comments-box-header">
-          &#9484;&#9472;[ KOMENTARZE ({{ comments.count }}) ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
-        </div>
         <div class="comments-list">
           {% if comments %}
             {% for comment in comments %}
             <div class="comment-item">
               <div class="comment-meta">
-                <span class="comment-prompt">&gt;</span>
                 <span class="comment-author">{{ comment.name }}</span>
                 <span class="comment-meta-sep"> @ </span>
                 <span class="comment-date">{{ comment.created|date:"Y-m-d H:i" }}</span>
               </div>
               <div class="comment-body">
-                <span class="comment-gutter">&#9482;</span>
                 {{ comment.body }}
               </div>
             </div>
             {% endfor %}
           {% else %}
             <div class="comment-empty">
-              <span class="text-muted">// Brak komentarzy. Badz pierwszy!</span>
+              <span class="text-muted">Brak komentarzy. Bądź pierwszy!</span>
             </div>
           {% endif %}
-        </div>
-        <div class="comments-box-footer">
-          &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
         </div>
       </div>
 
       <!-- Add comment form -->
       <div class="comment-form-box">
-        <div class="comment-form-header">
-          &#9484;&#9472;[ DODAJ KOMENTARZ ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
-        </div>
         <div class="comment-form-body">
           <form method="post" action="">
             {% csrf_token %}
 
             <div class="form-field">
               <label for="{{ comment_form.name.id_for_label }}" class="form-label">
-                &gt; {{ comment_form.name.label }}:
+                {{ comment_form.name.label }}
               </label>
               {% if request.user.is_authenticated %}
                 <input type="text"
@@ -259,7 +228,7 @@
 
             <div class="form-field">
               <label for="{{ comment_form.email.id_for_label }}" class="form-label">
-                &gt; {{ comment_form.email.label }}:
+                {{ comment_form.email.label }}
               </label>
               {% if request.user.is_authenticated %}
                 <input type="email"
@@ -278,7 +247,7 @@
 
             <div class="form-field">
               <label for="{{ comment_form.body.id_for_label }}" class="form-label">
-                &gt; {{ comment_form.body.label }}:
+                {{ comment_form.body.label }}
               </label>
               {{ comment_form.body }}
               {% if comment_form.body.errors %}
@@ -287,12 +256,9 @@
             </div>
 
             <div class="form-submit">
-              <button type="submit" class="btn-terminal">[&gt;&gt; OPUBLIKUJ KOMENTARZ ]</button>
+              <button type="submit" class="btn-terminal">Opublikuj komentarz</button>
             </div>
           </form>
-        </div>
-        <div class="comment-form-footer">
-          &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
         </div>
       </div>
 

@@ -7,9 +7,7 @@
 
   <!-- PUBLICZNY PROFIL AUTORA -->
   <div class="terminal-box profile-box">
-    <div class="terminal-box-header">
-      <span class="box-tl">┌</span><span class="box-h">─</span><span class="box-label">[ PROFIL AUTORA ]</span><span class="box-h">────────────────────────────────────────</span><span class="box-tr">┐</span>
-    </div>
+    <div class="terminal-box-header">Profil autora</div>
 
     <div class="terminal-box-body profile-body">
       <div class="profile-header">
@@ -44,45 +42,30 @@
 
         {% if profile.avatar %}
           <div class="profile-avatar-wrap">
-            <div class="avatar-box">
-              <span class="box-tl">┌</span><span class="box-h">──────────────</span><span class="box-tr">┐</span><br>
-              <span class="box-v">│</span><img src="{{ profile.avatar.url }}" alt="Avatar @{{ profile_user.username }}" class="profile-avatar"><span class="box-v">│</span><br>
-              <span class="box-bl">└</span><span class="box-h">──────────────</span><span class="box-br">┘</span>
-            </div>
+            <img src="{{ profile.avatar.url }}" alt="Avatar @{{ profile_user.username }}" class="profile-avatar">
           </div>
         {% endif %}
       </div>
-    </div>
-
-    <div class="terminal-box-footer">
-      <span class="box-bl">└</span><span class="box-h">─────────────────────────────────────────────────────────────</span><span class="box-br">┘</span>
     </div>
   </div>
 
   <!-- POSTY AUTORA -->
   <div class="terminal-box posts-box">
-    <div class="terminal-box-header">
-      <span class="box-tl">┌</span><span class="box-h">─</span><span class="box-label">[ POSTY AUTORA ({{ posts.count }}) ]</span><span class="box-h">─────────────────────────────────</span><span class="box-tr">┐</span>
-    </div>
+    <div class="terminal-box-header">Posty autora ({{ posts.count }})</div>
 
     <div class="terminal-box-body">
       {% if posts %}
         <ul class="profile-posts-list">
           {% for post in posts %}
             <li class="profile-post-item">
-              <span class="post-arrow">&gt;</span>
               <a href="{{ post.get_absolute_url }}" class="terminal-link profile-post-title">{{ post.title }}</a>
-              <span class="profile-post-date">[{{ post.publish|date:"Y-m-d" }}]</span>
+              <span class="profile-post-date">{{ post.publish|date:"Y-m-d" }}</span>
             </li>
           {% endfor %}
         </ul>
       {% else %}
-        <p class="no-posts-msg">> Ten autor nie ma jeszcze żadnych opublikowanych postów.</p>
+        <p class="no-posts-msg">Ten autor nie ma jeszcze żadnych opublikowanych postów.</p>
       {% endif %}
-    </div>
-
-    <div class="terminal-box-footer">
-      <span class="box-bl">└</span><span class="box-h">─────────────────────────────────────────────────────────────</span><span class="box-br">┘</span>
     </div>
   </div>
 

@@ -31,43 +31,32 @@
     <!-- FILTER HEADER -->
     {% if tag %}
     <div class="filter-header">
-      <span class="filter-prompt">$</span>
-      <span class="filter-cmd"> grep -r </span>
-      <span class="filter-arg">"#{{ tag.name }}"</span>
-      <span class="filter-cmd"> ./posts/</span>
+      <span class="filter-label">Posty z tagiem:</span>
+      <span class="filter-value">#{{ tag.name }}</span>
     </div>
     {% elif category %}
     <div class="filter-header">
-      <span class="filter-prompt">$</span>
-      <span class="filter-cmd"> ls ./posts/</span>
-      <span class="filter-arg">{{ category.name }}/</span>
+      <span class="filter-label">Kategoria:</span>
+      <span class="filter-value">{{ category.name }}</span>
     </div>
     {% elif author %}
     <div class="filter-header">
-      <span class="filter-prompt">$</span>
-      <span class="filter-cmd"> git log --author=</span>
-      <span class="filter-arg">"{{ author.username }}"</span>
+      <span class="filter-label">Autor:</span>
+      <span class="filter-value">{{ author.username }}</span>
     </div>
     {% else %}
     <div class="filter-header">
-      <span class="filter-prompt">$</span>
-      <span class="filter-cmd"> ls -la ./posts/ </span>
-      <span class="filter-meta">| {{ posts.paginator.count|default:"0" }} wpisow</span>
+      <span class="filter-label">Wszystkie posty</span>
+      <span class="filter-meta">{{ posts.paginator.count|default:"0" }} wpisów</span>
     </div>
     {% endif %}
 
     <!-- POST CARDS -->
     {% for post in posts %}
     <article class="post-card">
-      <div class="post-card-top-border">
-        &#9484;&#9472;[ POST ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
-      </div>
       <div class="post-card-body">
         <h2 class="post-card-title">
-          <a href="{{ post.get_absolute_url }}" class="post-card-title-link">
-            <span class="post-card-title-prompt">&gt;</span>
-            {{ post.title }}
-          </a>
+          <a href="{{ post.get_absolute_url }}" class="post-card-title-link">{{ post.title }}</a>
         </h2>
 
         <div class="post-card-meta">
@@ -79,18 +68,7 @@
           <a href="{{ post.category.get_absolute_url }}" class="post-meta-category" style="color: {{ post.category.color }};">{{ post.category.name }}</a>
           {% endif %}
           <span class="post-meta-sep"> &middot; </span>
-          <span class="post-meta-reading">
-            {% with rt=post.reading_time %}
-            {% if rt >= 10 %}&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;
-            {% elif rt >= 8 %}&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9617;&#9617;
-            {% elif rt >= 6 %}&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;
-            {% elif rt >= 4 %}&#9608;&#9608;&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;
-            {% elif rt >= 2 %}&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;
-            {% else %}&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;
-            {% endif %}
-            {% endwith %}
-            {{ post.reading_time }} min
-          </span>
+          <span class="post-meta-reading">{{ post.reading_time }} min</span>
         </div>
 
         {% if post.tags.all %}
@@ -106,23 +84,15 @@
         {% endif %}
 
         <div class="post-card-footer">
-          <a href="{{ post.get_absolute_url }}" class="read-more-btn">[&gt;&gt; CZYTAJ DALEJ ]</a>
+          <a href="{{ post.get_absolute_url }}" class="read-more-btn">Czytaj dalej →</a>
         </div>
-      </div>
-      <div class="post-card-bottom-border">
-        &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
       </div>
     </article>
     {% empty %}
     <div class="post-card empty-state">
-      <div class="post-card-top-border">&#9484;&#9472;[ OUTPUT ]&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
       <div class="post-card-body">
-        <p class="empty-msg">
-          <span class="accent-yellow">// brak postow do wyswietlenia</span><br>
-          <span class="accent-green">&gt;</span> Dodaj pierwszy post przez <a href="{% url 'admin:index' %}" class="link-blue">panel admina</a>.
-        </p>
+        <p class="empty-msg">Brak postów do wyświetlenia. <a href="{% url 'admin:index' %}">Dodaj pierwszy post →</a></p>
       </div>
-      <div class="post-card-bottom-border">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</div>
     </div>
     {% endfor %}
 

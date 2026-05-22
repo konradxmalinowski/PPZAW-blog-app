@@ -25,10 +25,8 @@ Sidebar: recent posts (inclusion tag), categories (context_processor), tag cloud
   <div class="sidebar-box-body">
     {% for cat in categories %}
     <div class="sidebar-category-item">
-      <a href="{% url 'blog:post_list_by_category' cat.slug %}" class="sidebar-category-link" style="color: {{ cat.color }};">
-        <span class="sidebar-prompt">&gt;</span> {{ cat.name }}
-      </a>
-      <span class="sidebar-count">[{{ cat.posts.count }}]</span>
+      <a href="{% url 'blog:post_list_by_category' cat.slug %}" class="sidebar-category-link" style="color: {{ cat.color }};">{{ cat.name }}</a>
+      <span class="sidebar-count">{{ cat.posts.count }}</span>
     </div>
     {% empty %}
     <p class="sidebar-empty">// brak kategorii</p>

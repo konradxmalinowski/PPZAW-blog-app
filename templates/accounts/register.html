@@ -4,19 +4,14 @@
 
 {% block content %}
 <div class="auth-container">
-
   <div class="terminal-box">
-    <div class="terminal-box-header">
-      <span class="box-tl">┌</span><span class="box-h">─</span><span class="box-label">[ NOWE KONTO ]</span><span class="box-h">──────────────────────────────────────────</span><span class="box-tr">┐</span>
-    </div>
-
+    <div class="terminal-box-header">Rejestracja</div>
     <div class="terminal-box-body">
-      <p class="auth-prompt">> Wypełnij formularz, aby utworzyć konto</p>
 
       {% if form.non_field_errors %}
         <div class="form-errors">
           {% for error in form.non_field_errors %}
-            <p class="error-line"><span class="error-marker">!</span> {{ error }}</p>
+            <p class="error-line">{{ error }}</p>
           {% endfor %}
         </div>
       {% endif %}
@@ -25,92 +20,50 @@
         {% csrf_token %}
 
         <div class="form-field">
-          <label class="field-label">> username:</label>
-          <div class="field-input-wrap">
-            {{ form.username }}
-          </div>
-          {% if form.username.errors %}
-            {% for error in form.username.errors %}
-              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
-            {% endfor %}
-          {% endif %}
+          <label class="field-label" for="{{ form.username.id_for_label }}">Nazwa użytkownika</label>
+          <div class="field-input-wrap">{{ form.username }}</div>
+          {% for error in form.username.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
         </div>
 
         <div class="form-field">
-          <label class="field-label">> imię:</label>
-          <div class="field-input-wrap">
-            {{ form.first_name }}
-          </div>
-          {% if form.first_name.errors %}
-            {% for error in form.first_name.errors %}
-              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
-            {% endfor %}
-          {% endif %}
+          <label class="field-label" for="{{ form.first_name.id_for_label }}">Imię</label>
+          <div class="field-input-wrap">{{ form.first_name }}</div>
+          {% for error in form.first_name.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
         </div>
 
         <div class="form-field">
-          <label class="field-label">> nazwisko:</label>
-          <div class="field-input-wrap">
-            {{ form.last_name }}
-          </div>
-          {% if form.last_name.errors %}
-            {% for error in form.last_name.errors %}
-              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
-            {% endfor %}
-          {% endif %}
+          <label class="field-label" for="{{ form.last_name.id_for_label }}">Nazwisko</label>
+          <div class="field-input-wrap">{{ form.last_name }}</div>
+          {% for error in form.last_name.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
         </div>
 
         <div class="form-field">
-          <label class="field-label">> email:</label>
-          <div class="field-input-wrap">
-            {{ form.email }}
-          </div>
-          {% if form.email.errors %}
-            {% for error in form.email.errors %}
-              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
-            {% endfor %}
-          {% endif %}
+          <label class="field-label" for="{{ form.email.id_for_label }}">Email</label>
+          <div class="field-input-wrap">{{ form.email }}</div>
+          {% for error in form.email.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
         </div>
 
         <div class="form-field">
-          <label class="field-label">> hasło:</label>
-          <div class="field-input-wrap">
-            {{ form.password1 }}
-          </div>
-          {% if form.password1.errors %}
-            {% for error in form.password1.errors %}
-              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
-            {% endfor %}
-          {% endif %}
+          <label class="field-label" for="{{ form.password1.id_for_label }}">Hasło</label>
+          <div class="field-input-wrap">{{ form.password1 }}</div>
+          {% for error in form.password1.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
         </div>
 
         <div class="form-field">
-          <label class="field-label">> powtórz hasło:</label>
-          <div class="field-input-wrap">
-            {{ form.password2 }}
-          </div>
-          {% if form.password2.errors %}
-            {% for error in form.password2.errors %}
-              <p class="field-error"><span class="error-marker">!</span> {{ error }}</p>
-            {% endfor %}
-          {% endif %}
+          <label class="field-label" for="{{ form.password2.id_for_label }}">Powtórz hasło</label>
+          <div class="field-input-wrap">{{ form.password2 }}</div>
+          {% for error in form.password2.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn-terminal">[>> ZAREJESTRUJ SIĘ ]</button>
+          <button type="submit" class="btn-terminal">Zarejestruj się</button>
         </div>
-
       </form>
 
       <div class="auth-alt-link">
-        <p>> Masz już konto? <a href="{% url 'accounts:login' %}" class="terminal-link">[LOGIN]</a></p>
+        Masz już konto? <a href="{% url 'accounts:login' %}">Zaloguj się</a>
       </div>
     </div>
-
-    <div class="terminal-box-footer">
-      <span class="box-bl">└</span><span class="box-h">─────────────────────────────────────────────────────────────</span><span class="box-br">┘</span>
-    </div>
   </div>
-
 </div>
 {% endblock %}
