@@ -1677,6 +1677,67 @@ select:focus-visible {
   word-break: break-all;
 }
 
+.post-reactions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.reaction-btn {
+  background: transparent;
+  border: 1px solid var(--bg-border);
+  color: var(--text-secondary);
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  transition: all 0.15s ease;
+}
+.reaction-btn:hover:not(:disabled) {
+  border-color: var(--accent-error);
+  color: var(--accent-error);
+}
+.reaction-btn.reaction-active {
+  border-color: var(--accent-error);
+  color: var(--accent-error);
+  background: rgba(255,68,68,0.08);
+}
+.reaction-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.post-views {
+  font-size: 0.82em;
+  color: var(--text-secondary);
+}
+.bookmark-btn {
+  background: transparent;
+  border: 1px solid var(--bg-border);
+  color: var(--text-secondary);
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  transition: all 0.15s ease;
+}
+.bookmark-btn:hover:not(:disabled) {
+  border-color: var(--accent-warn);
+  color: var(--accent-warn);
+}
+.bookmark-btn.bookmark-active {
+  border-color: var(--accent-warn);
+  color: var(--accent-warn);
+  background: rgba(255,215,0,0.06);
+}
+.bookmark-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.newsletter-form { display: flex; flex-direction: column; gap: 0.4rem; }
+.newsletter-input { width: 100%; }
+
 @media print {
   :root {
     --bg: #fff;

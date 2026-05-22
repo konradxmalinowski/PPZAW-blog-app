@@ -1,5 +1,9 @@
-from django.db import models
+import hashlib
+import secrets
+import uuid
+
 from django.contrib.auth.models import User
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -12,6 +16,7 @@ class UserProfile(models.Model):
     website = models.URLField(blank=True)
     totp_secret = models.CharField(max_length=32, blank=True)
     two_factor_enabled = models.BooleanField(default=False)
+    notify_comments = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'User Profile'
@@ -33,6 +38,68 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    # Use get_or_create to handle existing users (e.g. superuser created before this signal)
     profile, _ = UserProfile.objects.get_or_create(user=instance)
     profile.save()
+
+
+class EmailVerificationToken(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='email_verification')
+    token = models.UUIDField(default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    used = models.BooleanField(default=False)
+
+    def is_valid(self):
+        from datetime import timedelta
+        from django.utils.timezone import now
+        return not self.used and (now() - self.created_at) < timedelta(hours=24)
+
+
+class TwoFactorBackupCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='backup_codes')
+    code_hash = models.CharField(max_length=64)
+    used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @classmethod
+    def generate_for_user(cls, user, count=8):
+        cls.objects.filter(user=user).delete()
+        codes = []
+        for _ in range(count):
+            code = secrets.token_hex(5).upper()
+            code_hash = hashlib.sha256(code.encode()).hexdigest()
+            cls.objects.create(user=user, code_hash=code_hash)
+            codes.append(code)
+        return codes
+
+    @classmethod
+    def verify_and_consume(cls, user, code):
+        code_hash = hashlib.sha256(code.strip().upper().encode()).hexdigest()
+        try:
+            backup = cls.objects.get(user=user, code_hash=code_hash, used=False)
+            backup.used = True
+            backup.save()
+            return True
+        except cls.DoesNotExist:
+            return False
+
+
+class AuditLog(models.Model):
+    ACTION_CHOICES = [
+        ('login', 'Login'),
+        ('logout', 'Logout'),
+        ('password_change', 'Password Change'),
+        ('email_change', 'Email Change'),
+        ('2fa_enabled', '2FA Enabled'),
+        ('2fa_disabled', '2FA Disabled'),
+        ('2fa_failed', '2FA Failed'),
+        ('backup_code_used', 'Backup Code Used'),
+        ('register', 'Register'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='audit_logs')
+    action = models.CharField(max_length=30, choices=ACTION_CHOICES)
+    ip = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']

@@ -131,6 +131,23 @@
     </div>
     {% endif %}
 
+    <div class="post-reactions">
+      <button class="reaction-btn {% if user_liked %}reaction-active{% endif %}"
+              id="reaction-btn"
+              {% if not user.is_authenticated %}disabled title="Zaloguj się, by dodać reakcję"{% endif %}
+              data-post-id="{{ post.id }}"
+              data-url="{% url 'blog:toggle_reaction' post.id %}">
+        &#x2665; <span id="reaction-count">{{ post.reactions.count }}</span>
+      </button>
+      <button class="bookmark-btn {% if user_bookmarked %}bookmark-active{% endif %}"
+              id="bookmark-btn"
+              {% if not user.is_authenticated %}disabled title="Zaloguj się"{% endif %}
+              data-url="{% url 'blog:toggle_bookmark' post.id %}">
+        {% if user_bookmarked %}&#x2605; Zapisano{% else %}&#x2606; Zapisz{% endif %}
+      </button>
+      <span class="post-views">{{ post.views_count }} wyświetleń</span>
+    </div>
+
     <div class="post-share-link">
       <a href="{% url 'blog:post_share' post.id %}" class="share-btn">Udostępnij post</a>
     </div>
@@ -269,4 +286,34 @@
   </aside>
 
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const reactionBtn = document.getElementById('reaction-btn');
+if (reactionBtn && !reactionBtn.disabled) {
+  reactionBtn.addEventListener('click', async () => {
+    const res = await fetch(reactionBtn.dataset.url, {
+      method: 'POST',
+      headers: {'X-CSRFToken': '{{ csrf_token }}'},
+    });
+    const data = await res.json();
+    document.getElementById('reaction-count').textContent = data.count;
+    reactionBtn.classList.toggle('reaction-active', data.liked);
+  });
+}
+
+const bookmarkBtn = document.getElementById('bookmark-btn');
+if (bookmarkBtn && !bookmarkBtn.disabled) {
+  bookmarkBtn.addEventListener('click', async () => {
+    const res = await fetch(bookmarkBtn.dataset.url, {
+      method: 'POST',
+      headers: {'X-CSRFToken': '{{ csrf_token }}'},
+    });
+    const data = await res.json();
+    bookmarkBtn.classList.toggle('bookmark-active', data.saved);
+    bookmarkBtn.textContent = data.saved ? '★ Zapisano' : '☆ Zapisz';
+  });
+}
+</script>
 {% endblock %}

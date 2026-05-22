@@ -1,15 +1,21 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import models as db_models
 from django.db.models import Count, Q
-from django.shortcuts import get_object_or_404, render
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from django_ratelimit.decorators import ratelimit
 
 from taggit.models import Tag
 
-from apps.blog.forms import CommentForm, EmailPostForm, SearchForm
-from apps.blog.models import Comment, Category, Post
+from apps.blog.forms import CommentForm, EmailPostForm, PostForm, SearchForm
+from apps.blog.models import Bookmark, Comment, Category, Post, PostReaction, Subscriber
 
 
 class PostListView(ListView):
@@ -139,6 +145,16 @@ def post_detail(request, year, month, day, post):
         .order_by('-same_tags', '-publish')[:4]
     )
 
+    # Increment views_count once per session
+    session_key = f'viewed_post_{post_obj.id}'
+    if not request.session.get(session_key):
+        Post.objects.filter(id=post_obj.id).update(views_count=db_models.F('views_count') + 1)
+        request.session[session_key] = True
+        post_obj.views_count += 1
+
+    user_liked = post_obj.reactions.filter(user=request.user).exists() if request.user.is_authenticated else False
+    user_bookmarked = post_obj.bookmarks.filter(user=request.user).exists() if request.user.is_authenticated else False
+
     return render(request, 'blog/post_detail.html', {
         'post': post_obj,
         'comments': comments,
@@ -146,6 +162,8 @@ def post_detail(request, year, month, day, post):
         'comment_form': comment_form,
         'similar_posts': similar_posts,
         'section': 'blog',
+        'user_liked': user_liked,
+        'user_bookmarked': user_bookmarked,
     })
 
 
@@ -220,3 +238,124 @@ def post_search(request):
         'results': results,
         'section': 'search',
     })
+
+
+@login_required
+@require_POST
+def toggle_reaction(request, post_id):
+    post = get_object_or_404(Post, id=post_id, status='published')
+    reaction, created = PostReaction.objects.get_or_create(post=post, user=request.user)
+    if not created:
+        reaction.delete()
+        liked = False
+    else:
+        liked = True
+    count = post.reactions.count()
+    return JsonResponse({'liked': liked, 'count': count})
+
+
+@login_required
+@require_POST
+def toggle_bookmark(request, post_id):
+    post = get_object_or_404(Post, id=post_id, status='published')
+    bookmark, created = Bookmark.objects.get_or_create(user=request.user, post=post)
+    if not created:
+        bookmark.delete()
+        saved = False
+    else:
+        saved = True
+    return JsonResponse({'saved': saved})
+
+
+@login_required
+def bookmark_list(request):
+    bookmarks = Bookmark.objects.filter(user=request.user).select_related('post', 'post__author', 'post__category')
+    return render(request, 'blog/bookmark_list.html', {'bookmarks': bookmarks, 'section': 'bookmarks'})
+
+
+def newsletter_subscribe(request):
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        if email:
+            sub, created = Subscriber.objects.get_or_create(email=email)
+            if created:
+                _send_newsletter_confirm(request, sub)
+                messages.success(request, 'Sprawdź skrzynkę i potwierdź subskrypcję.')
+            else:
+                messages.info(request, 'Ten adres jest już zapisany.')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+    return redirect('blog:post_list')
+
+
+def newsletter_confirm(request, token):
+    sub = get_object_or_404(Subscriber, token=token)
+    sub.confirmed = True
+    sub.save()
+    messages.success(request, 'Subskrypcja potwierdzona!')
+    return redirect('blog:post_list')
+
+
+def newsletter_unsubscribe(request, token):
+    sub = get_object_or_404(Subscriber, token=token)
+    sub.delete()
+    messages.success(request, 'Wypisano z newslettera.')
+    return redirect('blog:post_list')
+
+
+def _send_newsletter_confirm(request, subscriber):
+    confirm_url = request.build_absolute_uri(
+        reverse('blog:newsletter_confirm', args=[subscriber.token])
+    )
+    send_mail(
+        'Potwierdź subskrypcję DevLog',
+        f'Kliknij link, by potwierdzić:\n{confirm_url}',
+        'devlog@example.com',
+        [subscriber.email],
+        fail_silently=True,
+    )
+
+
+@login_required
+def author_post_list(request):
+    posts = Post.objects.filter(author=request.user).order_by('-publish')
+    return render(request, 'blog/author_post_list.html', {'posts': posts, 'section': 'blog'})
+
+
+@login_required
+def author_post_new(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            form.save_m2m()
+            messages.success(request, 'Post zapisany.')
+            return redirect('blog:author_post_list')
+    else:
+        form = PostForm()
+    return render(request, 'blog/author_post_form.html', {'form': form, 'action': 'Nowy post'})
+
+
+@login_required
+def author_post_edit(request, slug):
+    post = get_object_or_404(Post, slug=slug, author=request.user)
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Post zaktualizowany.')
+            return redirect('blog:author_post_list')
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'blog/author_post_form.html', {'form': form, 'post': post, 'action': 'Edytuj post'})
+
+
+@login_required
+def author_post_delete(request, slug):
+    post = get_object_or_404(Post, slug=slug, author=request.user)
+    if request.method == 'POST':
+        post.delete()
+        messages.success(request, 'Post usunięty.')
+        return redirect('blog:author_post_list')
+    return render(request, 'blog/author_post_confirm_delete.html', {'post': post})

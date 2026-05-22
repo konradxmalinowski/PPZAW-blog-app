@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Usuń post — devlog{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+  <div class="terminal-box profile-box">
+    <div class="terminal-box-header">Potwierdź usunięcie</div>
+    <div class="terminal-box-body">
+      <p class="settings-desc" style="margin-bottom:1.5rem;">
+        Czy na pewno chcesz usunąć post <strong>{{ post.title }}</strong>? Tej operacji nie można cofnąć.
+      </p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-submit">
+          <button type="submit" class="btn-terminal btn-danger">Tak, usuń</button>
+          <a href="{% url 'blog:author_post_list' %}" class="btn-terminal btn-secondary">Anuluj</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

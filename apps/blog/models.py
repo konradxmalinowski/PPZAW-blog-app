@@ -1,4 +1,5 @@
 import re
+import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -61,6 +62,7 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=STATUS, default='draft')
     reading_time = models.PositiveIntegerField(default=0)
+    views_count = models.PositiveIntegerField(default=0)
 
     # SEO fields
     meta_description = models.CharField(
@@ -150,3 +152,55 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.name} on {self.post}'
+
+
+class PostReaction(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reactions')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='post_reactions')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('post', 'user')
+
+
+class Bookmark(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='bookmarks')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='bookmarks')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'post')
+        ordering = ['-created_at']
+
+
+class Subscriber(models.Model):
+    email = models.EmailField(unique=True)
+    confirmed = models.BooleanField(default=False)
+    token = models.UUIDField(default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
+
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+@receiver(post_save, sender=Post)
+def notify_subscribers(sender, instance, **kwargs):
+    if instance.status == 'published':
+        from django.core.mail import send_mail
+        subscribers = Subscriber.objects.filter(confirmed=True)
+        for sub in subscribers:
+            try:
+                unsub_url = f'/blog/newsletter/unsubscribe/{sub.token}/'
+                send_mail(
+                    f'Nowy post: {instance.title}',
+                    f'{instance.excerpt or instance.title}\n\nCzytaj: {instance.get_absolute_url()}\n\nWypisz się: {unsub_url}',
+                    'devlog@example.com',
+                    [sub.email],
+                    fail_silently=True,
+                )
+            except Exception:
+                pass

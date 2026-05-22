@@ -3,16 +3,32 @@ import io
 import pyotp
 import qrcode
 
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django_ratelimit.decorators import ratelimit
-from apps.accounts.forms import RegisterForm, UserProfileForm, ChangeEmailForm, TOTPVerifyForm
-from apps.accounts.models import UserProfile
+
+from apps.accounts.forms import ChangeEmailForm, RegisterForm, TOTPVerifyForm, UserProfileForm
+from apps.accounts.models import EmailVerificationToken, TwoFactorBackupCode, UserProfile
+from apps.accounts.utils import log_action
 from apps.blog.models import Post
+
+
+def _send_verification_email(request, user, token):
+    subject = render_to_string('email/verify_email_subject.txt').strip()
+    verify_url = request.build_absolute_uri(
+        f'/accounts/verify-email/{token.token}/'
+    )
+    body = render_to_string('email/verify_email.txt', {
+        'user': user,
+        'verify_url': verify_url,
+    })
+    send_mail(subject, body, None, [user.email])
 
 
 @ratelimit(key='ip', rate='10/h', method='POST', block=True)
@@ -22,12 +38,42 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('accounts:profile')
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            token = EmailVerificationToken.objects.create(user=user)
+            _send_verification_email(request, user, token)
+            log_action(request, user, 'register')
+            return redirect('accounts:verify_email_sent')
     else:
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'form': form})
+
+
+def verify_email_sent(request):
+    return render(request, 'accounts/verify_email_sent.html')
+
+
+def verify_email(request, token):
+    try:
+        verification = EmailVerificationToken.objects.select_related('user').get(token=token)
+    except EmailVerificationToken.DoesNotExist:
+        messages.error(request, 'Link weryfikacyjny jest nieprawidłowy.')
+        return redirect('accounts:login')
+
+    if not verification.is_valid():
+        messages.error(request, 'Link weryfikacyjny wygasł lub został już użyty.')
+        return redirect('accounts:login')
+
+    user = verification.user
+    user.is_active = True
+    user.save()
+    verification.used = True
+    verification.save()
+
+    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+    messages.success(request, 'Adres e-mail został potwierdzony. Witaj w DevLog!')
+    return redirect('accounts:profile')
 
 
 @login_required
@@ -77,6 +123,7 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
+            log_action(request, request.user, 'password_change')
             messages.success(request, 'Hasło zostało zmienione.')
             return redirect('accounts:settings')
     else:
@@ -90,6 +137,7 @@ def change_email(request):
         form = ChangeEmailForm(request.user, request.POST)
         if form.is_valid():
             form.save()
+            log_action(request, request.user, 'email_change')
             messages.success(request, 'Adres e-mail został zmieniony.')
             return redirect('accounts:settings')
     else:
@@ -128,8 +176,11 @@ def setup_2fa(request):
                 profile.two_factor_enabled = True
                 profile.save()
                 request.session['2fa_verified'] = True
+                codes = TwoFactorBackupCode.generate_for_user(request.user)
+                request.session['backup_codes'] = codes
+                log_action(request, request.user, '2fa_enabled')
                 messages.success(request, 'Weryfikacja dwuetapowa została włączona.')
-                return redirect('accounts:settings')
+                return redirect('accounts:show_backup_codes')
             else:
                 form.add_error('code', 'Nieprawidłowy kod. Spróbuj ponownie.')
     else:
@@ -143,6 +194,36 @@ def setup_2fa(request):
 
 
 @login_required
+def show_backup_codes(request):
+    codes = request.session.pop('backup_codes', [])
+    if not codes:
+        return redirect('accounts:settings')
+    return render(request, 'accounts/backup_codes.html', {'codes': codes})
+
+
+@login_required
+def regenerate_backup_codes(request):
+    if request.method != 'POST':
+        return redirect('accounts:settings')
+
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    if not profile.two_factor_enabled:
+        return redirect('accounts:settings')
+
+    form = TOTPVerifyForm(request.POST)
+    if form.is_valid():
+        totp = pyotp.TOTP(profile.totp_secret)
+        if totp.verify(form.cleaned_data['code']):
+            codes = TwoFactorBackupCode.generate_for_user(request.user)
+            request.session['backup_codes'] = codes
+            return redirect('accounts:show_backup_codes')
+        else:
+            messages.error(request, 'Nieprawidłowy kod TOTP.')
+
+    return redirect('accounts:settings')
+
+
+@login_required
 def disable_2fa(request):
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
@@ -153,7 +234,9 @@ def disable_2fa(request):
                 profile.two_factor_enabled = False
                 profile.totp_secret = ''
                 profile.save()
+                TwoFactorBackupCode.objects.filter(user=request.user).delete()
                 request.session.pop('2fa_verified', None)
+                log_action(request, request.user, '2fa_disabled')
                 messages.success(request, 'Weryfikacja dwuetapowa została wyłączona.')
                 return redirect('accounts:settings')
             else:
@@ -177,10 +260,17 @@ def verify_2fa(request):
         form = TOTPVerifyForm(request.POST)
         if form.is_valid():
             totp = pyotp.TOTP(profile.totp_secret)
-            if totp.verify(form.cleaned_data['code']):
+            code = form.cleaned_data['code']
+            if totp.verify(code):
                 request.session['2fa_verified'] = True
                 return redirect(next_url)
+            elif TwoFactorBackupCode.verify_and_consume(request.user, code):
+                request.session['2fa_verified'] = True
+                log_action(request, request.user, 'backup_code_used')
+                messages.warning(request, 'Zalogowano przy uzyciu kodu zapasowego.')
+                return redirect(next_url)
             else:
+                log_action(request, request.user, '2fa_failed')
                 form.add_error('code', 'Nieprawidłowy kod.')
     else:
         form = TOTPVerifyForm()

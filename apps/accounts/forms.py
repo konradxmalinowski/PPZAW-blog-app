@@ -57,12 +57,13 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('bio', 'avatar', 'github_url', 'website')
+        fields = ('bio', 'avatar', 'github_url', 'website', 'notify_comments')
         labels = {
             'bio': 'Bio',
             'avatar': 'Avatar',
             'github_url': 'GitHub URL',
             'website': 'Strona WWW',
+            'notify_comments': 'Powiadomienia e-mail o komentarzach',
         }
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 4}),

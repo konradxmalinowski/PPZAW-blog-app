@@ -1,7 +1,7 @@
 import bleach
 from django import forms
 
-from apps.blog.models import Comment
+from apps.blog.models import Comment, Post
 
 ALLOWED_COMMENT_TAGS = ['b', 'i', 'em', 'strong', 'code', 'pre', 'a', 'p', 'br']
 ALLOWED_COMMENT_ATTRS = {'a': ['href', 'title']}
@@ -58,3 +58,28 @@ class SearchForm(forms.Form):
             'autofocus': True,
         }),
     )
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'slug', 'excerpt', 'body', 'category', 'cover_image',
+                  'cover_image_alt', 'status', 'meta_description']
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'Tytuł posta'}),
+            'slug': forms.TextInput(attrs={'placeholder': 'url-slug'}),
+            'excerpt': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Krótki opis...'}),
+            'body': forms.Textarea(attrs={'rows': 20, 'id': 'post-body-editor'}),
+            'meta_description': forms.TextInput(attrs={'placeholder': 'Meta description (max 160 znaków)'}),
+        }
+        labels = {
+            'title': 'Tytuł',
+            'slug': 'Slug URL',
+            'excerpt': 'Fragment / opis',
+            'body': 'Treść (Markdown)',
+            'category': 'Kategoria',
+            'cover_image': 'Zdjęcie nagłówkowe',
+            'cover_image_alt': 'Alt tekst zdjęcia',
+            'status': 'Status',
+            'meta_description': 'Meta description',
+        }

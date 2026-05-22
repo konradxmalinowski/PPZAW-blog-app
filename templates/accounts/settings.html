@@ -37,6 +37,13 @@
           </div>
           <a href="{% url 'accounts:disable_2fa' %}" class="btn-terminal btn-sm btn-danger">Wyłącz 2FA</a>
         </div>
+        <div class="settings-row">
+          <div class="settings-info">
+            <span class="settings-label">Kody zapasowe 2FA</span>
+            <span class="settings-desc">Jednorazowe kody do użycia gdy nie masz dostępu do aplikacji uwierzytelniającej.</span>
+          </div>
+          <a href="{% url 'accounts:show_backup_codes' %}" class="btn-terminal btn-sm">Kody zapasowe</a>
+        </div>
         {% else %}
         <div class="settings-row">
           <div class="settings-info">

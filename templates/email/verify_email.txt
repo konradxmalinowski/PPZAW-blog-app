@@ -1,0 +1,10 @@
+Cześć, {{ user.username }}!
+
+Dziękujemy za rejestrację w DevLog. Kliknij poniższy link, aby potwierdzić adres e-mail i aktywować konto:
+
+{{ verify_url }}
+
+Link jest ważny przez 24 godziny. Jeśli nie zakładałeś/aś konta w DevLog, zignoruj tę wiadomość.
+
+---
+DevLog — Blog o cyklu tworzenia aplikacji webowej

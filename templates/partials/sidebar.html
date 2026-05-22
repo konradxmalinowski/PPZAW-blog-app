@@ -37,3 +37,15 @@ Sidebar: recent posts (inclusion tag), categories (context_processor), tag cloud
     {% show_tag_cloud %}
   </div>
 </div>
+
+<div class="sidebar-box">
+  <div class="sidebar-box-header">Newsletter</div>
+  <div class="sidebar-box-body">
+    <p class="sidebar-text">Otrzymuj powiadomienia o nowych postach.</p>
+    <form method="post" action="{% url 'blog:newsletter_subscribe' %}" class="newsletter-form">
+      {% csrf_token %}
+      <input type="email" name="email" placeholder="twoj@email.com" class="form-input newsletter-input" required>
+      <button type="submit" class="btn-terminal btn-sm" style="margin-top:0.5rem;width:100%;">Subskrybuj</button>
+    </form>
+  </div>
+</div>

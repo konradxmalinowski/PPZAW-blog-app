@@ -38,6 +38,9 @@
       </form>
 
       <div class="auth-alt-link">
+        <a href="{% url 'accounts:password_reset' %}">Zapomniałem hasła</a>
+      </div>
+      <div class="auth-alt-link">
         Nie masz konta? <a href="{% url 'accounts:register' %}">Zarejestruj się</a>
       </div>
     </div>

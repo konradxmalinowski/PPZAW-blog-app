@@ -85,6 +85,8 @@
         <li><a href="{% url 'blog:post_list' %}" class="nav-link{% if section == 'blog' %} active{% endif %}">Blog</a></li>
         <li><a href="{% url 'blog:post_search' %}" class="nav-link{% if section == 'search' %} active{% endif %}">Szukaj</a></li>
         {% if user.is_authenticated %}
+          <li><a href="{% url 'blog:author_post_list' %}" class="nav-link">Moje posty</a></li>
+          <li><a href="{% url 'blog:bookmark_list' %}" class="nav-link">Zakładki</a></li>
           <li><a href="{% url 'accounts:profile' %}" class="nav-link nav-link-user">{{ user.username }}</a></li>
           <li>
             <form method="post" action="{% url 'accounts:logout' %}" style="display:inline">
