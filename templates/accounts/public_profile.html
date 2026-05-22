@@ -37,6 +37,13 @@
               <p class="profile-bio-text">{{ profile.bio }}</p>
             </div>
           {% endif %}
+
+          {% if profile_user.last_login %}
+            <p class="profile-row">
+              <span class="profile-key">Ostatnia aktywność:</span>
+              <span class="profile-val">{{ profile_user.last_login|date:"Y-m-d" }}</span>
+            </p>
+          {% endif %}
         </div>
 
         {% if profile.avatar %}

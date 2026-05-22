@@ -1,14 +1,18 @@
+{% if DEBUG %}
+User-agent: *
+Disallow: /
+{% else %}
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /accounts/profile/
 Disallow: /accounts/profile/edit/
+Disallow: /accounts/settings/
 Disallow: /api/
 Disallow: /markdownx/
 Disallow: /*?page=*
 Disallow: /search/
 
-# Crawl-delay dla botów nie-Google
 User-agent: Bingbot
 Crawl-delay: 10
 
@@ -16,3 +20,4 @@ User-agent: Googlebot
 Allow: /
 
 Sitemap: {{ SITE_URL }}/sitemap.xml
+{% endif %}

@@ -181,6 +181,17 @@
               </div>
             </div>
             {% endfor %}
+            {% if comments.has_other_pages %}
+            <div class="comment-pagination">
+              {% if comments.has_previous %}
+                <a href="?comment_page={{ comments.previous_page_number }}" class="btn-terminal btn-sm">← wcześniejsze</a>
+              {% endif %}
+              <span class="comment-page-info">str. {{ comments.number }} / {{ comments.paginator.num_pages }}</span>
+              {% if comments.has_next %}
+                <a href="?comment_page={{ comments.next_page_number }}" class="btn-terminal btn-sm">następne →</a>
+              {% endif %}
+            </div>
+            {% endif %}
           {% else %}
             <div class="comment-empty">
               <span class="text-muted">Brak komentarzy. Bądź pierwszy!</span>

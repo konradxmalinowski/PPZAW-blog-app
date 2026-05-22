@@ -23,6 +23,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'markdownx',
+    'axes',
 ]
 
 LOCAL_APPS = [
@@ -36,6 +37,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'devlog.middleware.SecurityHeadersMiddleware',
+    'axes.middleware.AxesMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -149,3 +151,21 @@ PERMISSIONS_POLICY = (
 
 # Pagination for SEO
 BLOG_POSTS_PER_PAGE = 10
+
+# Session security
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 14   # 14 days
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# django-axes: brute-force protection
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = 1          # 1 hour
+AXES_RESET_ON_SUCCESS = True
+AXES_LOCKOUT_TEMPLATE = 'accounts/locked_out.html'
+AXES_ENABLE_ADMIN = True

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Konto zablokowane — devlog{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="terminal-box auth-box">
+    <div class="terminal-box-header">Dostęp zablokowany</div>
+    <div class="terminal-box-body">
+      <p class="settings-desc" style="margin-bottom:1rem;">
+        Za dużo nieudanych prób logowania. Konto zostało tymczasowo zablokowane.
+      </p>
+      <p class="settings-desc">
+        Spróbuj ponownie za <strong>1 godzinę</strong> lub skontaktuj się z administratorem.
+      </p>
+      <div class="form-submit" style="margin-top:1.5rem;">
+        <a href="{% url 'blog:post_list' %}" class="btn-terminal">Wróć do strony głównej</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

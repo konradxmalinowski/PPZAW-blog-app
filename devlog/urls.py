@@ -15,6 +15,7 @@ class RobotsTxtView(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['SITE_URL'] = settings.SITE_URL
+        ctx['DEBUG'] = settings.DEBUG
         return ctx
 
 
@@ -43,9 +44,12 @@ urlpatterns = [
     ),
 ]
 
+handler429 = 'devlog.views.handler429'
+
 if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    try:
+        import debug_toolbar
+        urlpatterns = [path('__debug__/', include(debug_toolbar.urls))] + urlpatterns
+    except ImportError:
+        pass

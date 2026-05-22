@@ -1,6 +1,10 @@
+import bleach
 from django import forms
 
 from apps.blog.models import Comment
+
+ALLOWED_COMMENT_TAGS = ['b', 'i', 'em', 'strong', 'code', 'pre', 'a', 'p', 'br']
+ALLOWED_COMMENT_ATTRS = {'a': ['href', 'title']}
 
 
 class EmailPostForm(forms.Form):
@@ -39,6 +43,10 @@ class CommentForm(forms.ModelForm):
             'email': 'E-mail',
             'body': 'Komentarz',
         }
+
+    def clean_body(self):
+        body = self.cleaned_data['body']
+        return bleach.clean(body, tags=ALLOWED_COMMENT_TAGS, attributes=ALLOWED_COMMENT_ATTRS, strip=True)
 
 
 class SearchForm(forms.Form):

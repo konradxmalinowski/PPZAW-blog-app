@@ -1,8 +1,10 @@
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView
+from django_ratelimit.decorators import ratelimit
 
 from taggit.models import Tag
 
@@ -28,7 +30,6 @@ def post_list_by_tag(request, tag_slug):
     posts = Post.published.filter(tags__in=[tag])
 
     # Manual pagination
-    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
     paginator = Paginator(posts, 3)
     page_number = request.GET.get('page', 1)
     try:
@@ -91,8 +92,9 @@ class AuthorPostListView(ListView):
         return context
 
 
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 def post_detail(request, year, month, day, post):
-    """FBV — post detail with comments and similar posts by shared tags."""
+    """FBV — post detail with comments (paginated) and similar posts by shared tags."""
     post_obj = get_object_or_404(
         Post,
         status='published',
@@ -102,8 +104,15 @@ def post_detail(request, year, month, day, post):
         publish__day=day,
     )
 
-    # Active comments for this post, oldest first
-    comments = post_obj.comments.filter(active=True)
+    # Paginated active comments
+    all_comments = post_obj.comments.filter(active=True)
+    comment_paginator = Paginator(all_comments, 10)
+    comment_page = request.GET.get('comment_page', 1)
+    try:
+        comments = comment_paginator.page(comment_page)
+    except (EmptyPage, PageNotAnInteger):
+        comments = comment_paginator.page(1)
+
     new_comment = None
 
     if request.method == 'POST':
@@ -111,12 +120,12 @@ def post_detail(request, year, month, day, post):
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.post = post_obj
-            # Auto-associate authenticated user; override name/email to match account
             if request.user.is_authenticated:
                 new_comment.user = request.user
                 new_comment.name = request.user.get_full_name() or request.user.username
                 new_comment.email = request.user.email
             new_comment.save()
+            _notify_author_new_comment(post_obj, new_comment)
     else:
         comment_form = CommentForm()
 
@@ -138,6 +147,27 @@ def post_detail(request, year, month, day, post):
         'similar_posts': similar_posts,
         'section': 'blog',
     })
+
+
+def _notify_author_new_comment(post, comment):
+    """Send email to post author when a new comment is approved."""
+    try:
+        author = post.author
+        if not author.email:
+            return
+        profile = getattr(author, 'profile', None)
+        if profile and not getattr(profile, 'notify_comments', True):
+            return
+        subject = f'Nowy komentarz do: {post.title}'
+        message = (
+            f'Hej {author.get_full_name() or author.username},\n\n'
+            f'{comment.name} skomentował(a) Twój post "{post.title}":\n\n'
+            f'{comment.body}\n\n'
+            f'Przejdź do posta:\n{post.get_absolute_url()}'
+        )
+        send_mail(subject, message, 'devlog@example.com', [author.email], fail_silently=True)
+    except Exception:
+        pass
 
 
 def post_share(request, post_id):

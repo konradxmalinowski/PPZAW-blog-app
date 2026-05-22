@@ -9,11 +9,13 @@ from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django_ratelimit.decorators import ratelimit
 from apps.accounts.forms import RegisterForm, UserProfileForm, ChangeEmailForm, TOTPVerifyForm
 from apps.accounts.models import UserProfile
 from apps.blog.models import Post
 
 
+@ratelimit(key='ip', rate='10/h', method='POST', block=True)
 def register(request):
     if request.user.is_authenticated:
         return redirect('blog:post_list')

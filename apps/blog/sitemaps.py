@@ -1,12 +1,11 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
+from django.utils.timezone import now
 
 from apps.blog.models import Category, Post
 
 
 class PostSitemap(Sitemap):
-    changefreq = 'weekly'
-    priority = 0.9
     protocol = 'https'
 
     def items(self):
@@ -17,6 +16,22 @@ class PostSitemap(Sitemap):
 
     def location(self, obj):
         return obj.get_absolute_url()
+
+    def priority(self, obj):
+        age_days = (now() - obj.publish).days
+        if age_days < 30:
+            return 0.9
+        if age_days < 180:
+            return 0.7
+        return 0.5
+
+    def changefreq(self, obj):
+        age_days = (now() - obj.publish).days
+        if age_days < 30:
+            return 'daily'
+        if age_days < 180:
+            return 'weekly'
+        return 'monthly'
 
 
 class CategorySitemap(Sitemap):
