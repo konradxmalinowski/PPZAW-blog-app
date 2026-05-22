@@ -6,10 +6,8 @@
 {% block content %}
 <div class="content-wrapper">
 
-  <!-- MAIN COLUMN -->
   <div class="posts-column">
 
-    <!-- SEARCH BOX -->
     <div class="terminal-box search-box">
       <div class="terminal-box-header">Wyszukaj post</div>
       <div class="terminal-box-body">
@@ -26,7 +24,6 @@
       </div>
     </div>
 
-    <!-- RESULTS -->
     {% if query %}
     <div class="search-results-section">
 
@@ -74,7 +71,6 @@
 
   </div>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar-column">
     {% include "partials/sidebar.html" %}
   </aside>

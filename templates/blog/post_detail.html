@@ -65,10 +65,8 @@
 {% block content %}
 <div class="content-wrapper">
 
-  <!-- MAIN COLUMN -->
   <div class="posts-column post-detail-column">
 
-    <!-- BREADCRUMB — semantic nav with microdata -->
     <nav aria-label="Breadcrumb" class="breadcrumb-nav">
       <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
@@ -93,7 +91,6 @@
       </ol>
     </nav>
 
-    <!-- POST HEADER -->
     <div class="post-detail-header">
       <h1 class="post-detail-title">{{ post.title }}</h1>
       <div class="post-detail-meta">
@@ -110,7 +107,6 @@
       </div>
     </div>
 
-    <!-- COVER IMAGE — eager for LCP (above fold), explicit dimensions hint -->
     {% if post.cover_image %}
     <div class="post-cover-image">
       <img src="{{ post.cover_image.url }}"
@@ -122,12 +118,10 @@
     </div>
     {% endif %}
 
-    <!-- POST BODY (Markdown rendered) -->
     <div class="post-body markdown-content">
       {{ post.body|markdownify }}
     </div>
 
-    <!-- TAGS -->
     {% if post.tags.all %}
     <div class="post-tags-section">
       <span class="post-tags-label">tagi:</span>
@@ -137,12 +131,10 @@
     </div>
     {% endif %}
 
-    <!-- SHARE LINK -->
     <div class="post-share-link">
       <a href="{% url 'blog:post_share' post.id %}" class="share-btn">Udostępnij post</a>
     </div>
 
-    <!-- SIMILAR POSTS -->
     {% if similar_posts %}
     <div class="similar-posts-section">
       <div class="sidebar-box-header">Podobne posty</div>
@@ -165,19 +157,15 @@
     </div>
     {% endif %}
 
-    <!-- COMMENTS SECTION -->
     <section class="comments-section" aria-labelledby="comments-heading">
       <h2 id="comments-heading" class="sr-only">Komentarze</h2>
 
-      <!-- Comment added success message -->
       {% if new_comment %}
       <div class="comment-success">
-        <span class="accent-green">&gt; Komentarz dodany pomyslnie.</span>
-        <span class="text-secondary"> // Twoj komentarz czeka na moderacje.</span>
+        Komentarz dodany. Czeka na moderację.
       </div>
       {% endif %}
 
-      <!-- List of existing comments -->
       <div class="comments-box">
         <div class="comments-list">
           {% if comments %}
@@ -201,7 +189,6 @@
         </div>
       </div>
 
-      <!-- Add comment form -->
       <div class="comment-form-box">
         <div class="comment-form-body">
           <form method="post" action="">
@@ -263,11 +250,9 @@
       </div>
 
     </section>
-    <!-- /comments-section -->
 
   </div>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar-column">
     {% include "partials/sidebar.html" %}
   </aside>

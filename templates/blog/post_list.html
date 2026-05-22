@@ -17,7 +17,7 @@
 <link rel="next" href="?page={{ posts.next_page_number }}">
 {% endif %}
 {% if tag %}
-<!-- Tag pages are noindex to avoid duplicate content -->
+
 {% block meta_robots %}noindex, follow{% endblock %}
 {% endif %}
 {% endblock %}
@@ -25,10 +25,8 @@
 {% block content %}
 <div class="content-wrapper">
 
-  <!-- MAIN COLUMN -->
   <div class="posts-column">
 
-    <!-- FILTER HEADER -->
     {% if tag %}
     <div class="filter-header">
       <span class="filter-label">Posty z tagiem:</span>
@@ -51,7 +49,6 @@
     </div>
     {% endif %}
 
-    <!-- POST CARDS -->
     {% for post in posts %}
     <article class="post-card">
       <div class="post-card-body">
@@ -96,11 +93,9 @@
     </div>
     {% endfor %}
 
-    <!-- PAGINATION -->
     {% include "partials/pagination.html" %}
   </div>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar-column">
     {% with categories=categories popular_tags=popular_tags %}
       {% include "partials/sidebar.html" %}

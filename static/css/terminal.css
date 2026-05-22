@@ -1,24 +1,17 @@
-/* ============================================================
-   DevLog — Terminal CSS
-   Dark GitHub-inspired terminal UI
-   Font: JetBrains Mono (loaded from Google Fonts in base.html)
-   ============================================================ */
-
-/* ─── CSS VARIABLES ─────────────────────────────────────────── */
 :root {
   --bg:             #0d1117;
   --bg-card:        #161b22;
-  --bg-border:      #1e3d1e;       /* zielony border */
+  --bg-border:      #1e3d1e;
   --bg-hover:       #1c2b1c;
   --bg-card-hover:  #1c2b1c;
 
-  --text-primary:   #e0e0e0;       /* biały tekst — czytelny */
+  --text-primary:   #e0e0e0;
   --text-secondary: #9e9e9e;
   --text-muted:     #5a5a5a;
 
-  --accent-green:   #00ff41;       /* Matrix neon — nagłówki i akcenty */
+  --accent-green:   #00ff41;
   --accent-lime:    #39d353;
-  --accent-blue:    #58d68d;       /* linki — miękka zieleń */
+  --accent-blue:    #58d68d;
   --accent-warn:    #ffd700;
   --accent-error:   #ff4444;
   --accent-yellow:  #ffd700;
@@ -40,7 +33,6 @@
   --sidebar-width: 260px;
 }
 
-/* ─── RESET & BASE ───────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -83,7 +75,6 @@ ul, ol {
   list-style: none;
 }
 
-/* ─── NAVBAR ─────────────────────────────────────────────────── */
 .navbar {
   position: sticky;
   top: 0;
@@ -159,7 +150,6 @@ ul, ol {
   background: rgba(0, 255, 65, 0.08);
 }
 
-/* ─── FLASH MESSAGES ─────────────────────────────────────────── */
 .messages-container {
   max-width: var(--content-max-width);
   margin: 0.75rem auto;
@@ -178,17 +168,11 @@ ul, ol {
   font-size: 0.9em;
 }
 
-.message-prompt {
-  color: var(--accent-green);
-  font-weight: 700;
-}
-
 .message-success { border-color: var(--accent-green); }
 .message-error   { border-color: var(--accent-red); }
 .message-warning { border-color: var(--accent-yellow); }
 .message-info    { border-color: var(--accent-blue); }
 
-/* ─── MAIN CONTENT ───────────────────────────────────────────── */
 .main-content {
   flex: 1;
   max-width: var(--content-max-width);
@@ -197,7 +181,6 @@ ul, ol {
   padding: 1.5rem;
 }
 
-/* ─── TWO-COLUMN LAYOUT ──────────────────────────────────────── */
 .content-wrapper {
   display: grid;
   grid-template-columns: 1fr var(--sidebar-width);
@@ -217,13 +200,15 @@ ul, ol {
   gap: 1rem;
 }
 
-/* ─── FILTER HEADER ──────────────────────────────────────────── */
 .filter-header {
   font-size: 0.9em;
   margin-bottom: 1.25rem;
   padding: 0.4rem 0;
   border-bottom: 1px solid var(--bg-border);
   color: var(--text-secondary);
+  display: flex;
+  gap: 0.4rem;
+  align-items: baseline;
 }
 
 .filter-label {
@@ -243,7 +228,6 @@ ul, ol {
   margin-left: auto;
 }
 
-/* ─── POST CARD ──────────────────────────────────────────────── */
 .post-card {
   margin-bottom: 1.5rem;
   background: var(--bg-card);
@@ -256,12 +240,6 @@ ul, ol {
 .post-card:hover {
   border-color: var(--accent-lime);
   box-shadow: var(--glow-green);
-}
-
-/* ASCII top/bottom border elements kept in HTML — hide them cleanly */
-.post-card-top-border,
-.post-card-bottom-border {
-  display: none;
 }
 
 .post-card-body {
@@ -288,12 +266,6 @@ ul, ol {
   color: var(--accent-green);
 }
 
-.post-card-title-prompt {
-  color: var(--accent-lime);
-  flex-shrink: 0;
-}
-
-/* ─── POST META ──────────────────────────────────────────────── */
 .post-card-meta,
 .post-detail-meta {
   font-size: 0.82em;
@@ -335,7 +307,6 @@ ul, ol {
   font-size: 0.9em;
 }
 
-/* ─── TAGS ───────────────────────────────────────────────────── */
 .post-card-tags,
 .post-tags-section {
   display: flex;
@@ -374,7 +345,6 @@ ul, ol {
   border-color: var(--accent-lime);
 }
 
-/* ─── EXCERPT & FOOTER ───────────────────────────────────────── */
 .post-card-excerpt {
   color: var(--text-secondary);
   font-size: 0.88em;
@@ -398,7 +368,6 @@ ul, ol {
   color: var(--accent-green);
 }
 
-/* ─── EMPTY STATE ────────────────────────────────────────────── */
 .empty-state .post-card-body {
   padding: 2rem 1.25rem;
 }
@@ -408,7 +377,6 @@ ul, ol {
   line-height: 2;
 }
 
-/* ─── PAGINATION ─────────────────────────────────────────────── */
 .pagination {
   margin-top: 2rem;
 }
@@ -455,7 +423,6 @@ ul, ol {
   color: var(--text-primary);
 }
 
-/* ─── SIDEBAR ────────────────────────────────────────────────── */
 .sidebar-box {
   background: var(--bg-card);
   border: 1px solid var(--bg-border);
@@ -546,14 +513,12 @@ ul, ol {
   font-style: italic;
 }
 
-/* ─── BREADCRUMB ─────────────────────────────────────────────── */
 .breadcrumb {
   font-size: 0.82em;
   margin-bottom: 1rem;
   color: var(--text-secondary);
 }
 
-/* ─── POST DETAIL ────────────────────────────────────────────── */
 .post-detail-header {
   margin-bottom: 2rem;
 }
@@ -578,7 +543,6 @@ ul, ol {
   font-size: 0.85em;
 }
 
-/* ─── MARKDOWN BODY ──────────────────────────────────────────── */
 .markdown-content {
   font-size: 1rem;
   line-height: 1.8;
@@ -698,7 +662,6 @@ ul, ol {
   margin: 1rem 0;
 }
 
-/* ─── SIMILAR POSTS ──────────────────────────────────────────── */
 .similar-posts-section {
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -721,7 +684,6 @@ ul, ol {
   line-height: 1.4;
 }
 
-/* ─── COMMENTS SECTION ───────────────────────────────────────── */
 .comments-section {
   margin-top: 2rem;
   padding-top: 1rem;
@@ -738,7 +700,6 @@ ul, ol {
   line-height: 2;
 }
 
-/* ─── COVER IMAGE ────────────────────────────────────────────── */
 .post-cover-image {
   margin-bottom: 1.5rem;
 }
@@ -749,13 +710,6 @@ ul, ol {
   border: 1px solid var(--bg-border);
 }
 
-/* ─── READING PROGRESS (ASCII bar) ──────────────────────────── */
-.reading-progress {
-  font-family: var(--font-mono);
-  letter-spacing: 0;
-}
-
-/* ─── FOOTER ─────────────────────────────────────────────────── */
 .footer {
   border-top: 1px solid var(--bg-border);
   margin-top: auto;
@@ -799,7 +753,6 @@ ul, ol {
   font-size: 0.9em;
 }
 
-/* ─── UTILITIES ──────────────────────────────────────────────── */
 .accent-green  { color: var(--accent-green); }
 .accent-blue   { color: var(--accent-blue); }
 .accent-yellow { color: var(--accent-yellow); }
@@ -808,15 +761,9 @@ ul, ol {
 .text-secondary { color: var(--text-secondary); }
 .text-muted    { color: var(--text-muted); }
 
-.link-blue {
-  color: var(--accent-blue);
-}
+.link-blue { color: var(--accent-blue); }
+.link-blue:hover { color: var(--accent-green); }
 
-.link-blue:hover {
-  color: var(--accent-green);
-}
-
-/* ─── RESPONSIVE — Mobile (<768px) ──────────────────────────── */
 @media (max-width: 767px) {
   :root {
     --font-size: 13px;
@@ -828,7 +775,7 @@ ul, ol {
 
   .sidebar-column {
     position: static;
-    display: none; /* Hidden on mobile — toggle in future JS phase */
+    display: none;
   }
 
   .navbar-inner {
@@ -867,7 +814,6 @@ ul, ol {
   }
 }
 
-/* ─── RESPONSIVE — Tablet (768px–1023px) ────────────────────── */
 @media (min-width: 768px) and (max-width: 1023px) {
   :root {
     --sidebar-width: 220px;
@@ -878,11 +824,6 @@ ul, ol {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   PHASE 2 — Forms, Comments, Search
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ─── TERMINAL BOX (generic card container) ──────────────────── */
 .terminal-box {
   background: var(--bg-card);
   border: 1px solid var(--bg-border);
@@ -909,7 +850,6 @@ ul, ol {
   padding: 1.25rem;
 }
 
-/* ─── FORM FIELDS ────────────────────────────────────────────── */
 .form-field {
   margin-bottom: 1rem;
   display: flex;
@@ -979,7 +919,6 @@ textarea::placeholder {
   align-items: center;
 }
 
-/* ─── TERMINAL BUTTON ────────────────────────────────────────── */
 .btn-terminal {
   display: inline-block;
   background: transparent;
@@ -1012,13 +951,6 @@ textarea::placeholder {
   color: var(--bg);
 }
 
-/* ─── COMMENTS SECTION ───────────────────────────────────────── */
-.comments-section {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--bg-border);
-}
-
 .comment-success {
   padding: 0.75rem 1rem;
   background-color: rgba(57, 211, 83, 0.05);
@@ -1028,23 +960,12 @@ textarea::placeholder {
   font-size: 0.88em;
 }
 
-.comment-success .share-success-line {
-  margin-bottom: 0.2rem;
-}
-
 .comments-box {
   background-color: var(--bg-card);
   border: 1px solid var(--bg-border);
   border-radius: 6px;
   overflow: hidden;
   margin-bottom: 1rem;
-}
-
-.comments-box-header,
-.comments-box-footer,
-.comment-form-header,
-.comment-form-footer {
-  display: none;
 }
 
 .comments-list {
@@ -1071,11 +992,6 @@ textarea::placeholder {
   margin-bottom: 0.35rem;
 }
 
-.comment-prompt {
-  color: var(--accent-lime);
-  font-weight: 600;
-}
-
 .comment-author {
   color: var(--accent-purple);
   font-weight: 600;
@@ -1093,14 +1009,6 @@ textarea::placeholder {
   font-size: 0.88em;
   color: var(--text-primary);
   line-height: 1.65;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.comment-gutter {
-  color: var(--bg-border);
-  flex-shrink: 0;
-  margin-top: 0.05em;
 }
 
 .comment-empty {
@@ -1108,25 +1016,17 @@ textarea::placeholder {
   font-size: 0.85em;
 }
 
-/* ─── COMMENT FORM BOX ───────────────────────────────────────── */
 .comment-form-box {
   background-color: var(--bg-card);
-  border-left: 1px solid var(--bg-border);
-  border-right: 1px solid var(--bg-border);
+  border: 1px solid var(--bg-border);
   border-radius: var(--radius);
   margin-top: 1rem;
-}
-
-.comment-form-box:hover .comment-form-header,
-.comment-form-box:hover .comment-form-footer {
-  color: var(--accent-green);
 }
 
 .comment-form-body {
   padding: 1rem 1.25rem;
 }
 
-/* ─── SHARE LINK (post detail) ───────────────────────────────── */
 .post-share-link {
   margin-top: 1.25rem;
   padding-top: 1rem;
@@ -1146,11 +1046,6 @@ textarea::placeholder {
   color: var(--accent-green);
 }
 
-.share-prompt {
-  color: var(--accent-green);
-}
-
-/* ─── SHARE SUCCESS ──────────────────────────────────────────── */
 .share-success {
   padding: 1rem;
   display: flex;
@@ -1174,7 +1069,6 @@ textarea::placeholder {
   margin-top: 0.5rem;
 }
 
-/* ─── SHARE FORM ─────────────────────────────────────────────── */
 .share-post-info {
   margin-bottom: 1rem;
   font-size: 0.85em;
@@ -1182,7 +1076,6 @@ textarea::placeholder {
   border-bottom: 1px solid var(--bg-border);
 }
 
-/* ─── SEARCH ─────────────────────────────────────────────────── */
 .search-box {
   margin-bottom: 1.5rem;
 }
@@ -1230,7 +1123,6 @@ textarea::placeholder {
   margin-bottom: 1rem;
 }
 
-/* ─── RESPONSIVE: forms on mobile ───────────────────────────── */
 @media (max-width: 767px) {
   .search-field {
     flex-direction: column;
@@ -1251,9 +1143,6 @@ textarea::placeholder {
   }
 }
 
-/* ─── PHASE 3: SIDEBAR WIDGET COMPONENTS ────────────────────────────────── */
-
-/* Tag cloud */
 .tag-cloud {
   display: flex;
   flex-wrap: wrap;
@@ -1278,7 +1167,6 @@ textarea::placeholder {
   color: var(--text-secondary);
 }
 
-/* Sidebar post items (recent posts, most commented) */
 .sidebar-post-item {
   margin-bottom: 8px;
   border-left: 2px solid var(--bg-border);
@@ -1300,28 +1188,15 @@ textarea::placeholder {
   font-size: 0.8em;
 }
 
-/* Category description box */
 .category-description {
   border: 1px solid var(--bg-border);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   PHASE 4 — Accounts: Auth forms & Profile pages
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ─── AUTH CONTAINER (login / register / edit_profile) ──────── */
 .auth-container {
   max-width: 560px;
   margin: 2rem auto;
 }
 
-.auth-prompt {
-  color: var(--accent-green);
-  font-size: 0.85em;
-  margin-bottom: 1.25rem;
-}
-
-/* ─── TERMINAL FORM ──────────────────────────────────────────── */
 .terminal-form .form-field {
   margin-bottom: 1.1rem;
 }
@@ -1377,7 +1252,6 @@ input[type="password"]:focus {
   box-shadow: 0 0 0 2px rgba(0, 255, 65, 0.12);
 }
 
-/* ─── FORM ERRORS ────────────────────────────────────────────── */
 .form-errors {
   background-color: rgba(248, 81, 73, 0.08);
   border: 1px solid var(--accent-red);
@@ -1393,13 +1267,6 @@ input[type="password"]:focus {
   line-height: 1.5;
 }
 
-.error-marker {
-  color: var(--accent-red);
-  margin-right: 0.3rem;
-  font-weight: 700;
-}
-
-/* ─── FORM ACTIONS ───────────────────────────────────────────── */
 .form-actions {
   margin-top: 1.5rem;
   display: flex;
@@ -1408,7 +1275,6 @@ input[type="password"]:focus {
   align-items: center;
 }
 
-/* ─── AUTH ALTERNATIVE LINK ──────────────────────────────────── */
 .auth-alt-link {
   margin-top: 1.25rem;
   padding-top: 1rem;
@@ -1417,33 +1283,6 @@ input[type="password"]:focus {
   color: var(--text-secondary);
 }
 
-/* ─── BOX LABEL (ASCII box header label coloring) ────────────── */
-.box-label {
-  color: var(--accent-green);
-}
-
-.box-h {
-  color: var(--bg-border);
-}
-
-.box-tl, .box-tr, .box-bl, .box-br, .box-v {
-  color: var(--bg-border);
-}
-
-.terminal-box:hover .box-label {
-  color: var(--accent-green);
-}
-
-.terminal-box:hover .box-h,
-.terminal-box:hover .box-tl,
-.terminal-box:hover .box-tr,
-.terminal-box:hover .box-bl,
-.terminal-box:hover .box-br,
-.terminal-box:hover .box-v {
-  color: var(--accent-green);
-}
-
-/* ─── SECONDARY BUTTON (alias) ───────────────────────────────── */
 .btn-secondary {
   border-color: var(--text-secondary);
   color: var(--text-secondary);
@@ -1454,7 +1293,6 @@ input[type="password"]:focus {
   color: var(--bg);
 }
 
-/* ─── PROFILE PAGE ───────────────────────────────────────────── */
 .profile-container {
   max-width: 760px;
   margin: 0 auto;
@@ -1517,16 +1355,8 @@ input[type="password"]:focus {
   border-top: 1px solid var(--bg-border);
 }
 
-/* ─── AVATAR ─────────────────────────────────────────────────── */
 .profile-avatar-wrap {
   flex-shrink: 0;
-}
-
-.avatar-box {
-  font-size: 0.75em;
-  color: var(--bg-border);
-  line-height: 1.2;
-  text-align: center;
 }
 
 .profile-avatar {
@@ -1535,6 +1365,7 @@ input[type="password"]:focus {
   height: 96px;
   object-fit: cover;
   border-radius: var(--radius);
+  border: 1px solid var(--bg-border);
 }
 
 .profile-avatar-preview {
@@ -1551,7 +1382,6 @@ input[type="password"]:focus {
   margin-bottom: 1rem;
 }
 
-/* ─── PROFILE POSTS LIST ─────────────────────────────────────── */
 .profile-posts-list {
   list-style: none;
   padding: 0;
@@ -1569,11 +1399,6 @@ input[type="password"]:focus {
 
 .profile-post-item:last-child {
   border-bottom: none;
-}
-
-.post-arrow {
-  color: var(--accent-green);
-  flex-shrink: 0;
 }
 
 .profile-post-title {
@@ -1600,7 +1425,6 @@ input[type="password"]:focus {
   font-size: 0.88em;
 }
 
-/* ─── RESPONSIVE — accounts ──────────────────────────────────── */
 @media (max-width: 600px) {
   .auth-container {
     margin: 1rem auto;
@@ -1619,11 +1443,6 @@ input[type="password"]:focus {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   PHASE 7 — Terminal UI Polish
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ─── READING PROGRESS BAR (fixed top, 2px line) ─────────────── */
 #reading-progress {
   position: fixed;
   top: 0;
@@ -1636,8 +1455,6 @@ input[type="password"]:focus {
   pointer-events: none;
 }
 
-/* ─── ALERT / FLASH MESSAGES (alternative classes) ───────────── */
-/* Used alongside .message/.message-success for auto-dismiss JS */
 .alert {
   padding: 0.5rem 0.75rem;
   margin-bottom: 0.5rem;
@@ -1645,12 +1462,6 @@ input[type="password"]:focus {
   background-color: var(--bg-card);
   font-size: 0.9em;
   transition: opacity 0.5s ease;
-}
-
-.alert::before {
-  content: '> ';
-  color: var(--accent-green);
-  font-weight: 700;
 }
 
 .alert-success {
@@ -1677,38 +1488,6 @@ input[type="password"]:focus {
   color: var(--accent-blue);
 }
 
-/* ─── TAG-LIST alias (matches spec naming) ───────────────────── */
-/* .post-card-tags already handles this; .tag-list is an alias */
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  align-items: center;
-}
-
-/* ─── SIDEBAR-TITLE alias ────────────────────────────────────── */
-/* .sidebar-box-header already handles this; alias for spec compliance */
-.sidebar-title {
-  color: var(--accent-green);
-  font-size: 0.78em;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--bg-border);
-}
-
-/* ─── SIDEBAR-BOX alias (title variant) ──────────────────────── */
-.sidebar-box .sidebar-title {
-  padding: 0.5rem 0.75rem;
-  background-color: var(--bg);
-  margin: 0;
-  border-bottom: 1px solid var(--bg-border);
-}
-
-/* ─── ACCESSIBILITY — WCAG 2.1 AAA ───────────────────────────── */
-
-/* Skip navigation link (WCAG 2.4.1) */
 .skip-link {
   position: absolute;
   top: -9999px;
@@ -1730,7 +1509,6 @@ input[type="password"]:focus {
   box-shadow: var(--glow-green-strong);
 }
 
-/* Focus-visible: WCAG 2.4.7 / 2.4.11 AAA — only keyboard focus */
 :focus-visible {
   outline: 2px solid var(--accent-green);
   outline-offset: 3px;
@@ -1747,7 +1525,6 @@ select:focus-visible {
   box-shadow: var(--glow-green);
 }
 
-/* Screen-reader only utility */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1760,7 +1537,6 @@ select:focus-visible {
   border: 0;
 }
 
-/* Breadcrumb nav */
 .breadcrumb-nav {
   font-size: 0.78rem;
   color: var(--text-secondary);
@@ -1780,7 +1556,6 @@ select:focus-visible {
   color: var(--text-primary);
 }
 
-/* ─── REDUCED MOTION ─────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -1791,13 +1566,11 @@ select:focus-visible {
   #reading-progress { display: none; }
 }
 
-/* ─── CUSTOM SCROLLBAR (webkit) ──────────────────────────────── */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-lime); }
 
-/* ─── PRINT STYLES ───────────────────────────────────────────── */
 @media print {
   :root {
     --bg: #fff;

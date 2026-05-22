@@ -6,10 +6,8 @@
 {% block content %}
 <div class="content-wrapper">
 
-  <!-- MAIN COLUMN -->
   <div class="posts-column">
 
-    <!-- FILTER HEADER -->
     <div class="filter-header">
       <span class="filter-label">Posty w kategorii:</span>
       <span class="filter-value">{{ category.name }}</span>
@@ -27,7 +25,6 @@
     </div>
     {% endif %}
 
-    <!-- POST CARDS -->
     {% for post in posts %}
     <article class="post-card">
       <div class="post-card-body">
@@ -69,11 +66,9 @@
     </div>
     {% endfor %}
 
-    <!-- PAGINATION -->
     {% include "partials/pagination.html" %}
   </div>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar-column">
     {% include "partials/sidebar.html" %}
   </aside>

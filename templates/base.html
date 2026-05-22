@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <!-- Primary meta -->
   <title>{% block title %}{{ SITE_NAME|default:"DevLog" }}{% endblock %} | DevLog</title>
   <meta name="description" content="{% block meta_description %}{{ SITE_DESCRIPTION|default:"Blog o cyklu tworzenia aplikacji webowej" }}{% endblock %}">
   <meta name="keywords"    content="{% block meta_keywords %}django, python, web development, programowanie{% endblock %}">
@@ -13,14 +12,11 @@
   <meta name="robots"      content="{% block meta_robots %}index, follow{% endblock %}">
   <meta name="theme-color" content="#0a0f0a">
 
-  <!-- Canonical -->
   <link rel="canonical" href="{% block canonical_url %}{{ SITE_URL }}{{ request.path }}{% endblock %}">
 
-  <!-- hreflang — Polish content -->
   <link rel="alternate" hreflang="pl" href="{{ SITE_URL }}{{ request.path }}">
   <link rel="alternate" hreflang="x-default" href="{{ SITE_URL }}{{ request.path }}">
 
-  <!-- Open Graph -->
   <meta property="og:site_name"   content="{{ SITE_NAME|default:'DevLog' }}">
   <meta property="og:type"        content="{% block og_type %}website{% endblock %}">
   <meta property="og:title"       content="{% block og_title %}{% block title_raw %}{{ SITE_NAME|default:'DevLog' }}{% endblock %}{% endblock %}">
@@ -31,14 +27,12 @@
   <meta property="og:image:height" content="630">
   <meta property="og:locale"      content="pl_PL">
 
-  <!-- Twitter Card -->
   <meta name="twitter:card"        content="summary_large_image">
   <meta name="twitter:site"        content="{{ TWITTER_HANDLE|default:'' }}">
   <meta name="twitter:title"       content="{% block twitter_title %}{{ SITE_NAME|default:'DevLog' }}{% endblock %}">
   <meta name="twitter:description" content="{% block twitter_description %}{{ SITE_DESCRIPTION|default:'' }}{% endblock %}">
   <meta name="twitter:image"       content="{% block twitter_image %}{{ SITE_DEFAULT_IMAGE|default:'' }}{% endblock %}">
 
-  <!-- Schema.org — WebSite z SearchAction -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -58,37 +52,30 @@
   }
   </script>
 
-  <!-- Schema.org — BreadcrumbList (nadpisywany przez blok) -->
   {% block schema_breadcrumb %}{% endblock %}
 
-  <!-- Schema.org — page specific (artykuł, profil itp.) -->
   {% block schema_extra %}{% endblock %}
 
-  <!-- Preconnect / Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 
-  <!-- Critical CSS preload -->
   <link rel="preload" href="{% static 'css/terminal.css' %}" as="style">
   <link rel="stylesheet" href="{% static 'css/terminal.css' %}">
 
-  <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME|default:'DevLog' }} RSS" href="{% url 'blog:post_feed' %}">
 
-  <!-- Favicon (SVG terminal-style) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect fill='%230d1117' width='32' height='32' rx='4'/><text y='22' x='4' font-size='20' fill='%237ee787' font-family='monospace'>&gt;_</text></svg>">
 
   {% block extra_css %}{% endblock %}
   {% block extra_head %}{% endblock %}
 </head>
 <body>
-  <!-- Skip to main content (WCAG 2.4.1) -->
+
   <a href="#main-content" class="skip-link">Przejdź do treści</a>
 
   <div id="reading-progress" aria-hidden="true" role="progressbar" aria-label="Postęp czytania"></div>
 
-  <!-- NAVBAR -->
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="navbar-inner">
       <a href="{% url 'blog:post_list' %}" class="navbar-brand">
@@ -108,7 +95,6 @@
     </div>
   </nav>
 
-  <!-- FLASH MESSAGES -->
   {% if messages %}
   <div class="messages-container">
     {% for message in messages %}
@@ -119,12 +105,10 @@
   </div>
   {% endif %}
 
-  <!-- MAIN CONTENT -->
   <main class="main-content" id="main-content" role="main">
     {% block content %}{% endblock %}
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-inner">
       <span class="footer-text">
