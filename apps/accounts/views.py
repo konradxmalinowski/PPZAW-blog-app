@@ -203,24 +203,24 @@ def show_backup_codes(request):
 
 @login_required
 def regenerate_backup_codes(request):
-    if request.method != 'POST':
-        return redirect('accounts:settings')
-
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
     if not profile.two_factor_enabled:
         return redirect('accounts:settings')
 
-    form = TOTPVerifyForm(request.POST)
-    if form.is_valid():
-        totp = pyotp.TOTP(profile.totp_secret)
-        if totp.verify(form.cleaned_data['code']):
-            codes = TwoFactorBackupCode.generate_for_user(request.user)
-            request.session['backup_codes'] = codes
-            return redirect('accounts:show_backup_codes')
-        else:
-            messages.error(request, 'Nieprawidłowy kod TOTP.')
+    if request.method == 'POST':
+        form = TOTPVerifyForm(request.POST)
+        if form.is_valid():
+            totp = pyotp.TOTP(profile.totp_secret)
+            if totp.verify(form.cleaned_data['code']):
+                codes = TwoFactorBackupCode.generate_for_user(request.user)
+                request.session['backup_codes'] = codes
+                return redirect('accounts:show_backup_codes')
+            else:
+                form.add_error('code', 'Nieprawidłowy kod TOTP. Spróbuj ponownie.')
+    else:
+        form = TOTPVerifyForm()
 
-    return redirect('accounts:settings')
+    return render(request, 'accounts/regenerate_backup_codes.html', {'form': form})
 
 
 @login_required

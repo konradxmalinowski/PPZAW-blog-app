@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Kody zapasowe 2FA — devlog{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+  <div class="terminal-box profile-box">
+    <div class="terminal-box-header">Wygeneruj nowe kody zapasowe</div>
+    <div class="terminal-box-body">
+      <p class="settings-desc" style="margin-bottom:1.5rem;">
+        Stare kody zapasowe zostaną unieważnione. Podaj aktualny kod z aplikacji uwierzytelniającej, by kontynuować.
+      </p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-field">
+          <label for="{{ form.code.id_for_label }}" class="form-label">Kod weryfikacyjny (TOTP)</label>
+          {{ form.code }}
+          {% if form.code.errors %}
+            <div class="form-error">{{ form.code.errors }}</div>
+          {% endif %}
+        </div>
+        <div class="form-submit">
+          <button type="submit" class="btn-terminal">Generuj nowe kody</button>
+          <a href="{% url 'accounts:settings' %}" class="btn-terminal btn-secondary">Anuluj</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
