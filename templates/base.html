@@ -86,7 +86,12 @@
         <li><a href="{% url 'blog:post_search' %}" class="nav-link{% if section == 'search' %} active{% endif %}">Szukaj</a></li>
         {% if user.is_authenticated %}
           <li><a href="{% url 'accounts:profile' %}" class="nav-link nav-link-user">{{ user.username }}</a></li>
-          <li><a href="{% url 'accounts:logout' %}" class="nav-link">Wyloguj</a></li>
+          <li>
+            <form method="post" action="{% url 'accounts:logout' %}" style="display:inline">
+              {% csrf_token %}
+              <button type="submit" class="nav-link nav-link-logout">Wyloguj</button>
+            </form>
+          </li>
         {% else %}
           <li><a href="{% url 'accounts:login' %}" class="nav-link">Logowanie</a></li>
           <li><a href="{% url 'accounts:register' %}" class="nav-link nav-link-cta">Rejestracja</a></li>

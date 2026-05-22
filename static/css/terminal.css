@@ -149,6 +149,13 @@ ul, ol {
 .nav-link-cta:hover {
   background: rgba(0, 255, 65, 0.08);
 }
+.nav-link-logout {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
 
 .messages-container {
   max-width: var(--content-max-width);
