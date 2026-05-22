@@ -72,7 +72,7 @@ class TestProfileView:
         assert '/login/' in response.url
 
     def test_profile_loads_for_authenticated_user(self, client, active_user):
-        client.login(username='activeuser', password='StrongPass123!')
+        client.force_login(active_user)
         response = client.get(reverse('accounts:profile'))
         assert response.status_code == 200
 
