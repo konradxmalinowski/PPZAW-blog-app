@@ -84,6 +84,9 @@
       <ul class="navbar-links">
         <li><a href="{% url 'blog:post_list' %}" class="nav-link{% if section == 'blog' %} active{% endif %}">Blog</a></li>
         <li><a href="{% url 'blog:post_search' %}" class="nav-link{% if section == 'search' %} active{% endif %}">Szukaj</a></li>
+        <li>
+          <button id="theme-toggle" class="theme-toggle" aria-label="Zmień motyw">[light]</button>
+        </li>
         {% if user.is_authenticated %}
           <li><a href="{% url 'blog:author_post_list' %}" class="nav-link">Moje posty</a></li>
           <li><a href="{% url 'blog:bookmark_list' %}" class="nav-link">Zakładki</a></li>

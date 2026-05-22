@@ -1,6 +1,7 @@
 """
 Custom template tags and filters for the blog app.
 """
+import re
 import bleach
 from django import template
 from django.db.models import Count, Q
@@ -51,6 +52,32 @@ def markdownify(value):
         strip=False,
     )
     return mark_safe(clean_html)
+
+
+@register.simple_tag
+def render_toc(body):
+    """Extract H2/H3 headings from Markdown and render as navigation ToC."""
+    headings = re.findall(r'^(#{2,3})\s+(.+)$', body, re.MULTILINE)
+    if len(headings) < 3:
+        return ''
+
+    items = []
+    for hashes, text in headings:
+        level = len(hashes)
+        anchor = re.sub(r'[^\w\s-]', '', text.lower()).strip()
+        anchor = re.sub(r'[\s_]+', '-', anchor)
+        indent = 'toc-h3' if level == 3 else 'toc-h2'
+        items.append(
+            f'<li class="{indent}"><a href="#{anchor}" class="toc-link">{text}</a></li>'
+        )
+
+    html = (
+        '<nav class="toc-nav" aria-label="Spis treści">'
+        '<ul class="toc-list">'
+        + ''.join(items)
+        + '</ul></nav>'
+    )
+    return mark_safe(html)
 
 
 # ─── INCLUSION TAGS ──────────────────────────────────────────────────────────

@@ -118,6 +118,11 @@
     </div>
     {% endif %}
 
+    {% render_toc post.body as toc_html %}
+    {% if toc_html %}
+    <div class="post-toc">{{ toc_html }}</div>
+    {% endif %}
+
     <div class="post-body markdown-content">
       {{ post.body|markdownify }}
     </div>

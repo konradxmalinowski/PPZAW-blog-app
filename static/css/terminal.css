@@ -33,6 +33,30 @@
   --sidebar-width: 260px;
 }
 
+.light-mode {
+  --bg:             #f6f8fa;
+  --bg-card:        #ffffff;
+  --bg-border:      #d0d7de;
+  --bg-hover:       #eaf0f6;
+  --bg-card-hover:  #eaf0f6;
+
+  --text-primary:   #1f2328;
+  --text-secondary: #656d76;
+  --text-muted:     #9198a1;
+
+  --accent-green:   #1a7f37;
+  --accent-lime:    #2da44e;
+  --accent-blue:    #0550ae;
+  --accent-warn:    #9a6700;
+  --accent-error:   #cf222e;
+  --accent-yellow:  #9a6700;
+  --accent-red:     #cf222e;
+  --accent-purple:  #2da44e;
+
+  --glow-green:        none;
+  --glow-green-strong: none;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -155,6 +179,19 @@ ul, ol {
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
+}
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  padding: 0 0.25rem;
+  transition: color 0.15s ease;
+}
+.theme-toggle:hover {
+  color: var(--accent-green);
 }
 
 .messages-container {
@@ -1737,6 +1774,29 @@ select:focus-visible {
 }
 .newsletter-form { display: flex; flex-direction: column; gap: 0.4rem; }
 .newsletter-input { width: 100%; }
+
+.toc-nav {
+  background: var(--bg-card);
+  border: 1px solid var(--bg-border);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toc-h2 { margin: 0.25rem 0; }
+.toc-h3 { margin: 0.2rem 0 0.2rem 1rem; }
+.toc-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85em;
+  transition: color 0.15s ease;
+}
+.toc-link:hover { color: var(--accent-green); }
+.toc-link.toc-active { color: var(--accent-green); font-weight: 600; }
 
 @media print {
   :root {
