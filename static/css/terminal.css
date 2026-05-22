@@ -227,8 +227,8 @@ ul, ol {
 }
 
 .filter-prompt {
-  color: var(--accent-green);
-  font-weight: 700;
+  color: var(--accent-lime);
+  font-weight: 600;
 }
 
 .filter-cmd {
@@ -289,7 +289,7 @@ ul, ol {
 }
 
 .post-card-title-prompt {
-  color: var(--accent-green);
+  color: var(--accent-lime);
   flex-shrink: 0;
 }
 
