@@ -52,8 +52,14 @@ X_FRAME_OPTIONS = 'DENY'
 # ── Site URL (used in SEO canonical, OG tags) ─────────────────────────────────
 SITE_URL = config('SITE_URL', default='https://devlog.onrender.com')
 
-# ── Email — short timeout so a blocked SMTP port fails fast, not after 120 s ──
-EMAIL_TIMEOUT = 5
+# ── Email — Resend API (HTTPS, works on Render free tier) ────────────────────
+RESEND_API_KEY = config('RESEND_API_KEY', default='')
+if RESEND_API_KEY:
+    EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
+    ANYMAIL = {'RESEND_API_KEY': RESEND_API_KEY}
+else:
+    # Fallback: SMTP with short timeout so blocked port fails fast, not after 120 s
+    EMAIL_TIMEOUT = 5
 
 # ── Logging — stdout only (Render captures stdout in its log viewer) ──────────
 LOGGING = {
