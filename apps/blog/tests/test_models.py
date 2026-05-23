@@ -11,7 +11,8 @@ def user(db):
 
 @pytest.fixture
 def category(db):
-    return Category.objects.create(name='Backend', slug='backend')
+    cat, _ = Category.objects.get_or_create(slug='backend', defaults={'name': 'Backend'})
+    return cat
 
 
 @pytest.fixture

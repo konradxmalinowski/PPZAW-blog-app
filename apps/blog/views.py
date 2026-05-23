@@ -1,8 +1,11 @@
+from django.conf import settings as django_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.validators import validate_email
 from django.db import models as db_models
 from django.db.models import Count, Q
 from django.http import JsonResponse
@@ -183,7 +186,7 @@ def _notify_author_new_comment(post, comment):
             f'{comment.body}\n\n'
             f'Przejdź do posta:\n{post.get_absolute_url()}'
         )
-        send_mail(subject, message, 'devlog@example.com', [author.email], fail_silently=True)
+        send_mail(subject, message, django_settings.DEFAULT_FROM_EMAIL, [author.email], fail_silently=True)
     except Exception:
         pass
 
@@ -203,7 +206,7 @@ def post_share(request, post_id):
                 f'Przeczytaj post "{post.title}" na:\n{post_url}\n\n'
                 f'Komentarz od {cd["name"]}:\n{cd["comments"]}'
             )
-            send_mail(subject, message, 'devlog@example.com', [cd['to']])
+            send_mail(subject, message, django_settings.DEFAULT_FROM_EMAIL, [cd['to']])
             sent = True
     else:
         form = EmailPostForm()
@@ -273,16 +276,21 @@ def bookmark_list(request):
     return render(request, 'blog/bookmark_list.html', {'bookmarks': bookmarks, 'section': 'bookmarks'})
 
 
+@ratelimit(key='ip', rate='5/h', method='POST', block=True)
 def newsletter_subscribe(request):
     if request.method == 'POST':
         email = request.POST.get('email', '').strip()
-        if email:
-            sub, created = Subscriber.objects.get_or_create(email=email)
-            if created:
-                _send_newsletter_confirm(request, sub)
-                messages.success(request, 'Sprawdź skrzynkę i potwierdź subskrypcję.')
-            else:
-                messages.info(request, 'Ten adres jest już zapisany.')
+        try:
+            validate_email(email)
+        except ValidationError:
+            messages.error(request, 'Nieprawidłowy adres e-mail.')
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+        sub, created = Subscriber.objects.get_or_create(email=email)
+        if created:
+            _send_newsletter_confirm(request, sub)
+            messages.success(request, 'Sprawdź skrzynkę i potwierdź subskrypcję.')
+        else:
+            messages.info(request, 'Ten adres jest już zapisany.')
         return redirect(request.META.get('HTTP_REFERER', '/'))
     return redirect('blog:post_list')
 
@@ -309,7 +317,7 @@ def _send_newsletter_confirm(request, subscriber):
     send_mail(
         'Potwierdź subskrypcję DevLog',
         f'Kliknij link, by potwierdzić:\n{confirm_url}',
-        'devlog@example.com',
+        django_settings.DEFAULT_FROM_EMAIL,
         [subscriber.email],
         fail_silently=True,
     )

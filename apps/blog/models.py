@@ -188,19 +188,21 @@ from django.dispatch import receiver
 
 
 @receiver(post_save, sender=Post)
-def notify_subscribers(sender, instance, **kwargs):
-    if instance.status == 'published':
-        from django.core.mail import send_mail
-        subscribers = Subscriber.objects.filter(confirmed=True)
-        for sub in subscribers:
-            try:
-                unsub_url = f'/blog/newsletter/unsubscribe/{sub.token}/'
-                send_mail(
-                    f'Nowy post: {instance.title}',
-                    f'{instance.excerpt or instance.title}\n\nCzytaj: {instance.get_absolute_url()}\n\nWypisz się: {unsub_url}',
-                    'devlog@example.com',
-                    [sub.email],
-                    fail_silently=True,
-                )
-            except Exception:
-                pass
+def notify_subscribers(sender, instance, created, **kwargs):
+    if not created or instance.status != 'published':
+        return
+    from django.conf import settings
+    from django.core.mail import send_mail
+    subscribers = Subscriber.objects.filter(confirmed=True)
+    for sub in subscribers:
+        try:
+            unsub_url = f'/blog/newsletter/unsubscribe/{sub.token}/'
+            send_mail(
+                f'Nowy post: {instance.title}',
+                f'{instance.excerpt or instance.title}\n\nCzytaj: {instance.get_absolute_url()}\n\nWypisz się: {unsub_url}',
+                settings.DEFAULT_FROM_EMAIL,
+                [sub.email],
+                fail_silently=True,
+            )
+        except Exception:
+            pass

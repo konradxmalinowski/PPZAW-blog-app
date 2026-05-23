@@ -1,7 +1,7 @@
-import hashlib
 import secrets
 import uuid
 
+from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -56,7 +56,7 @@ class EmailVerificationToken(models.Model):
 
 class TwoFactorBackupCode(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='backup_codes')
-    code_hash = models.CharField(max_length=64)
+    code_hash = models.CharField(max_length=128)
     used = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -66,21 +66,19 @@ class TwoFactorBackupCode(models.Model):
         codes = []
         for _ in range(count):
             code = secrets.token_hex(5).upper()
-            code_hash = hashlib.sha256(code.encode()).hexdigest()
-            cls.objects.create(user=user, code_hash=code_hash)
+            cls.objects.create(user=user, code_hash=make_password(code))
             codes.append(code)
         return codes
 
     @classmethod
     def verify_and_consume(cls, user, code):
-        code_hash = hashlib.sha256(code.strip().upper().encode()).hexdigest()
-        try:
-            backup = cls.objects.get(user=user, code_hash=code_hash, used=False)
-            backup.used = True
-            backup.save()
-            return True
-        except cls.DoesNotExist:
-            return False
+        submitted = code.strip().upper()
+        for backup in cls.objects.filter(user=user, used=False):
+            if check_password(submitted, backup.code_hash):
+                backup.used = True
+                backup.save()
+                return True
+        return False
 
 
 class AuditLog(models.Model):

@@ -5,14 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <title>{% block title %}{{ SITE_NAME|default:"DevLog" }}{% endblock %} | DevLog</title>
+  <title>{% block title %}DevLog{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}{{ SITE_DESCRIPTION|default:"Blog o cyklu tworzenia aplikacji webowej" }}{% endblock %}">
   <meta name="keywords"    content="{% block meta_keywords %}django, python, web development, programowanie{% endblock %}">
   <meta name="author"      content="{% block meta_author %}DevLog{% endblock %}">
   <meta name="robots"      content="{% block meta_robots %}index, follow{% endblock %}">
   <meta name="theme-color" content="#0a0f0a">
 
-  <link rel="canonical" href="{% block canonical_url %}{{ SITE_URL }}{{ request.path }}{% endblock %}">
+  <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
 
   <link rel="alternate" hreflang="pl" href="{{ SITE_URL }}{{ request.path }}">
   <link rel="alternate" hreflang="x-default" href="{{ SITE_URL }}{{ request.path }}">

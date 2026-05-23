@@ -12,6 +12,9 @@ class BlogConfig(AppConfig):
 
 
 def _bootstrap(sender, **kwargs):
+    import sys
+    if 'pytest' in sys.modules:
+        return
     _ensure_superuser()
     _ensure_sample_posts()
 

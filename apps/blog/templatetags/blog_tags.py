@@ -5,6 +5,7 @@ import re
 import bleach
 from django import template
 from django.db.models import Count, Q
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from markdownx.utils import markdownify as _markdownify
 
@@ -68,7 +69,7 @@ def render_toc(body):
         anchor = re.sub(r'[\s_]+', '-', anchor)
         indent = 'toc-h3' if level == 3 else 'toc-h2'
         items.append(
-            f'<li class="{indent}"><a href="#{anchor}" class="toc-link">{text}</a></li>'
+            f'<li class="{indent}"><a href="#{anchor}" class="toc-link">{escape(text)}</a></li>'
         )
 
     html = (

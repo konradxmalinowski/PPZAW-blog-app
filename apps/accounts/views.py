@@ -3,6 +3,7 @@ import io
 import pyotp
 import qrcode
 
+from django.conf import settings as django_settings
 from django.contrib import messages
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -11,6 +12,7 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
+from django.utils.http import url_has_allowed_host_and_scheme
 from django_ratelimit.decorators import ratelimit
 
 from apps.accounts.forms import ChangeEmailForm, RegisterForm, TOTPVerifyForm, UserProfileForm
@@ -246,6 +248,7 @@ def disable_2fa(request):
     return render(request, 'accounts/disable_2fa.html', {'form': form})
 
 
+@ratelimit(key='user_or_ip', rate='5/m', method='POST', block=True)
 def verify_2fa(request):
     if not request.user.is_authenticated:
         return redirect('accounts:login')
@@ -254,7 +257,10 @@ def verify_2fa(request):
     if not profile.two_factor_enabled:
         return redirect('blog:post_list')
 
-    next_url = request.GET.get('next') or request.POST.get('next') or '/'
+    raw_next = request.GET.get('next') or request.POST.get('next') or '/'
+    next_url = raw_next if url_has_allowed_host_and_scheme(
+        raw_next, allowed_hosts={request.get_host()}
+    ) else '/'
 
     if request.method == 'POST':
         form = TOTPVerifyForm(request.POST)
@@ -267,7 +273,7 @@ def verify_2fa(request):
             elif TwoFactorBackupCode.verify_and_consume(request.user, code):
                 request.session['2fa_verified'] = True
                 log_action(request, request.user, 'backup_code_used')
-                messages.warning(request, 'Zalogowano przy uzyciu kodu zapasowego.')
+                messages.warning(request, 'Zalogowano przy użyciu kodu zapasowego.')
                 return redirect(next_url)
             else:
                 log_action(request, request.user, '2fa_failed')

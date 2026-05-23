@@ -132,7 +132,8 @@ SITE_NAME = 'DevLog'
 SITE_URL = 'https://devlog.example.com'
 SITE_DESCRIPTION = 'Blog o cyklu tworzenia aplikacji webowej w Django'
 TWITTER_HANDLE = ''
-SITE_DEFAULT_OG_IMAGE = ''
+SITE_DEFAULT_OG_IMAGE = config('SITE_DEFAULT_OG_IMAGE', default='')
+SITE_DEFAULT_IMAGE = SITE_DEFAULT_OG_IMAGE
 
 # === Security Headers ===
 SECURE_CONTENT_TYPE_NOSNIFF = True
