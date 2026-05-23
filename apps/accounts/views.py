@@ -1,5 +1,6 @@
 import base64
 import io
+import logging
 import pyotp
 import qrcode
 
@@ -10,10 +11,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.core.mail import BadHeaderError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.utils.http import url_has_allowed_host_and_scheme
 from django_ratelimit.decorators import ratelimit
+
+logger = logging.getLogger(__name__)
 
 from apps.accounts.forms import ChangeEmailForm, RegisterForm, TOTPVerifyForm, UserProfileForm
 from apps.accounts.models import EmailVerificationToken, TwoFactorBackupCode, UserProfile
@@ -44,7 +48,17 @@ def register(request):
             user.is_active = False
             user.save()
             token = EmailVerificationToken.objects.create(user=user)
-            _send_verification_email(request, user, token)
+            try:
+                _send_verification_email(request, user, token)
+            except (BadHeaderError, OSError, Exception) as exc:
+                logger.error('Registration email failed for %s: %s', user.email, exc)
+                user.delete()
+                messages.error(
+                    request,
+                    'Nie udało się wysłać e-maila weryfikacyjnego. '
+                    'Sprawdź konfigurację serwera pocztowego lub spróbuj ponownie później.',
+                )
+                return render(request, 'accounts/register.html', {'form': form})
             log_action(request, user, 'register')
             return redirect('accounts:verify_email_sent')
     else:

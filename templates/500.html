@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>500 — Server Error | DevLog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117;
+      --bg-card: #161b22;
+      --bg-border: #30363d;
+      --text-primary: #c9d1d9;
+      --text-secondary: #8b949e;
+      --accent-green: #7ee787;
+      --accent-red: #f85149;
+      --accent-yellow: #e3b341;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .terminal-box {
+      border: 1px solid var(--bg-border);
+      background: var(--bg-card);
+      max-width: 600px;
+      width: 100%;
+      padding: 2rem;
+    }
+    .terminal-box::before {
+      content: '┌─[ DevLog ]──────────────────────────────────────────';
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.8em;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    .terminal-box::after {
+      content: '└────────────────────────────────────────────────────';
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.8em;
+      margin-top: 1.5rem;
+      overflow: hidden;
+    }
+    .error-code {
+      font-size: 3rem;
+      font-weight: 600;
+      color: var(--accent-red);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .error-title {
+      color: var(--accent-yellow);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    .prompt {
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+    .prompt span { color: var(--accent-green); }
+    .links { margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      color: var(--accent-green);
+      text-decoration: none;
+      border: 1px solid var(--bg-border);
+      padding: 0.4rem 0.9rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: border-color 0.15s;
+    }
+    .btn:hover { border-color: var(--accent-green); }
+  </style>
+</head>
+<body>
+  <div class="terminal-box">
+    <div class="error-code">500</div>
+    <div class="error-title">$ internal server error</div>
+    <div class="prompt">
+      <span>~/devlog $</span> handle request<br>
+      &gt; Error: 500 Internal Server Error — coś poszło nie tak po naszej stronie.
+    </div>
+    <div class="prompt">
+      Problem jest po stronie serwera.<br>
+      Spróbuj ponownie za chwilę.
+    </div>
+    <div class="links">
+      <a href="/" class="btn">[↩] strona główna</a>
+    </div>
+  </div>
+</body>
+</html>

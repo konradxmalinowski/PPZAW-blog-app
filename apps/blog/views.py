@@ -208,8 +208,11 @@ def post_share(request, post_id):
                 f'Przeczytaj post "{post.title}" na:\n{post_url}\n\n'
                 f'Komentarz od {cd["name"]}:\n{cd["comments"]}'
             )
-            send_mail(subject, message, django_settings.DEFAULT_FROM_EMAIL, [cd['to']])
-            sent = True
+            try:
+                send_mail(subject, message, django_settings.DEFAULT_FROM_EMAIL, [cd['to']])
+                sent = True
+            except Exception:
+                messages.error(request, 'Nie udało się wysłać e-maila. Spróbuj ponownie później.')
     else:
         form = EmailPostForm()
 
