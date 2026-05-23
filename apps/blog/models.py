@@ -193,13 +193,15 @@ def notify_subscribers(sender, instance, created, **kwargs):
         return
     from django.conf import settings
     from django.core.mail import send_mail
+    site_url = getattr(settings, 'SITE_URL', '').rstrip('/')
     subscribers = Subscriber.objects.filter(confirmed=True)
     for sub in subscribers:
         try:
-            unsub_url = f'/blog/newsletter/unsubscribe/{sub.token}/'
+            post_url = f'{site_url}{instance.get_absolute_url()}'
+            unsub_url = f'{site_url}/blog/newsletter/unsubscribe/{sub.token}/'
             send_mail(
                 f'Nowy post: {instance.title}',
-                f'{instance.excerpt or instance.title}\n\nCzytaj: {instance.get_absolute_url()}\n\nWypisz się: {unsub_url}',
+                f'{instance.excerpt or instance.title}\n\nCzytaj: {post_url}\n\nWypisz się: {unsub_url}',
                 settings.DEFAULT_FROM_EMAIL,
                 [sub.email],
                 fail_silently=True,
