@@ -81,7 +81,9 @@
       <a href="{% url 'blog:post_list' %}" class="navbar-brand">
         <span class="brand-bracket">&gt;</span> DevLog
       </a>
-      <ul class="navbar-links">
+      <button class="navbar-toggle" id="navbar-toggle"
+              aria-label="Otwórz menu nawigacyjne" aria-expanded="false" aria-controls="navbar-links">[≡]</button>
+      <ul class="navbar-links" id="navbar-links">
         <li><a href="{% url 'blog:post_list' %}" class="nav-link{% if section == 'blog' %} active{% endif %}">Blog</a></li>
         <li><a href="{% url 'blog:post_search' %}" class="nav-link{% if section == 'search' %} active{% endif %}">Szukaj</a></li>
         <li>

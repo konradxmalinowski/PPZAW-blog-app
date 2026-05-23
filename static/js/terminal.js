@@ -101,6 +101,34 @@ function initThemeToggle() {
   });
 }
 
+function initNavToggle() {
+  const toggle = document.getElementById('navbar-toggle');
+  const navbar = document.querySelector('.navbar');
+  if (!toggle || !navbar) return;
+
+  toggle.addEventListener('click', () => {
+    const open = navbar.classList.toggle('nav-open');
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.textContent = open ? '[×]' : '[≡]';
+  });
+
+  navbar.querySelectorAll('a.nav-link, button.nav-link-logout').forEach(el => {
+    el.addEventListener('click', () => {
+      navbar.classList.remove('nav-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.textContent = '[≡]';
+    });
+  });
+
+  document.addEventListener('click', e => {
+    if (navbar.classList.contains('nav-open') && !navbar.contains(e.target)) {
+      navbar.classList.remove('nav-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.textContent = '[≡]';
+    }
+  });
+}
+
 function initToc() {
   const links = document.querySelectorAll('.toc-link');
   if (!links.length) return;
@@ -128,5 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initPrefetch();
   initExternalLinks();
   initThemeToggle();
+  initNavToggle();
   initToc();
 });
