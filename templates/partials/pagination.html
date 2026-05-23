@@ -1,22 +1,35 @@
 {% if is_paginated %}
-<nav class="pagination" aria-label="Paginacja">
+<nav class="pagination" aria-label="Nawigacja między stronami" role="navigation">
   <div class="pagination-inner">
+
     {% if page_obj.has_previous %}
-      <a href="?page={{ page_obj.previous_page_number }}" class="pagination-btn pagination-prev">← Poprzednia</a>
+      <a href="?page={{ page_obj.previous_page_number }}" class="pagination-btn pagination-prev"
+         aria-label="Poprzednia strona">&#8592; Poprzednia</a>
     {% else %}
-      <span class="pagination-btn pagination-disabled">← Poprzednia</span>
+      <span class="pagination-btn pagination-disabled" aria-disabled="true">&#8592; Poprzednia</span>
     {% endif %}
 
-    <span class="pagination-info">
-      strona <span class="pagination-current">{{ page_obj.number }}</span>
-      z <span class="pagination-total">{{ page_obj.paginator.num_pages }}</span>
-    </span>
+    <div class="pagination-pages" role="list">
+      {% for num in page_obj.paginator.page_range %}
+        {% if num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+          {% if num == page_obj.number %}
+            <span class="pagination-page pagination-page--active" aria-current="page" aria-label="Strona {{ num }}">{{ num }}</span>
+          {% else %}
+            <a href="?page={{ num }}" class="pagination-page" aria-label="Strona {{ num }}">{{ num }}</a>
+          {% endif %}
+        {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
+          <span class="pagination-ellipsis" aria-hidden="true">…</span>
+        {% endif %}
+      {% endfor %}
+    </div>
 
     {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}" class="pagination-btn pagination-next">Następna →</a>
+      <a href="?page={{ page_obj.next_page_number }}" class="pagination-btn pagination-next"
+         aria-label="Następna strona">Następna &#8594;</a>
     {% else %}
-      <span class="pagination-btn pagination-disabled">Następna →</span>
+      <span class="pagination-btn pagination-disabled" aria-disabled="true">Następna &#8594;</span>
     {% endif %}
+
   </div>
 </nav>
 {% endif %}

@@ -1,7 +1,21 @@
 {% load static blog_tags %}
-{% comment %}
-Sidebar: recent posts (inclusion tag), categories (context_processor), tag cloud (inclusion tag).
-{% endcomment %}
+
+<div class="sidebar-box sidebar-newsletter">
+  <div class="sidebar-box-header">Newsletter</div>
+  <div class="sidebar-box-body">
+    <p class="sidebar-text">Otrzymuj powiadomienia o nowych postach.</p>
+    <form method="post" action="{% url 'blog:newsletter_subscribe' %}" class="newsletter-form" aria-label="Formularz subskrypcji newsletter">
+      {% csrf_token %}
+      <label for="newsletter-email" class="sr-only">Adres e-mail</label>
+      <input type="email" id="newsletter-email" name="email" placeholder="twoj@email.com"
+             class="form-input newsletter-input" required aria-required="true"
+             aria-label="Adres e-mail do newslettera">
+      <button type="submit" class="btn-terminal btn-sm" style="margin-top:0.5rem;width:100%;">
+        Subskrybuj
+      </button>
+    </form>
+  </div>
+</div>
 
 <div class="sidebar-box">
   <div class="sidebar-box-header">Ostatnie posty</div>
@@ -22,8 +36,9 @@ Sidebar: recent posts (inclusion tag), categories (context_processor), tag cloud
   <div class="sidebar-box-body">
     {% for cat in categories %}
     <div class="sidebar-category-item">
-      <a href="{% url 'blog:post_list_by_category' cat.slug %}" class="sidebar-category-link" style="color: {{ cat.color }};">{{ cat.name }}</a>
-      <span class="sidebar-count">{{ cat.posts.count }}</span>
+      <a href="{% url 'blog:post_list_by_category' cat.slug %}" class="sidebar-category-link"
+         style="color: {{ cat.color }};" aria-label="Posty w kategorii {{ cat.name }}">{{ cat.name }}</a>
+      <span class="sidebar-count" aria-label="{{ cat.posts.count }} postów">{{ cat.posts.count }}</span>
     </div>
     {% empty %}
     <p class="sidebar-empty">// brak kategorii</p>
@@ -35,17 +50,5 @@ Sidebar: recent posts (inclusion tag), categories (context_processor), tag cloud
   <div class="sidebar-box-header">Tagi</div>
   <div class="sidebar-box-body sidebar-tags">
     {% show_tag_cloud %}
-  </div>
-</div>
-
-<div class="sidebar-box">
-  <div class="sidebar-box-header">Newsletter</div>
-  <div class="sidebar-box-body">
-    <p class="sidebar-text">Otrzymuj powiadomienia o nowych postach.</p>
-    <form method="post" action="{% url 'blog:newsletter_subscribe' %}" class="newsletter-form">
-      {% csrf_token %}
-      <input type="email" name="email" placeholder="twoj@email.com" class="form-input newsletter-input" required>
-      <button type="submit" class="btn-terminal btn-sm" style="margin-top:0.5rem;width:100%;">Subskrybuj</button>
-    </form>
   </div>
 </div>

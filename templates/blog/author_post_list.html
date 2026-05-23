@@ -1,37 +1,63 @@
 {% extends "base.html" %}
 
-{% block title %}Moje posty — devlog{% endblock %}
+{% block title %}{% if is_moderator %}Panel moderatora{% else %}Moje posty{% endif %} — devlog{% endblock %}
 
 {% block content %}
-<div class="profile-container" style="max-width:900px;">
+<div class="profile-container" style="max-width:960px;">
   <div class="terminal-box">
-    <div class="terminal-box-header">Moje posty</div>
+    <div class="terminal-box-header">
+      {% if is_moderator %}
+        <span style="color:var(--accent-warn);">&#9654;</span> Panel moderatora — wszystkie posty
+      {% else %}
+        &#9654; Moje posty
+      {% endif %}
+    </div>
     <div class="terminal-box-body">
 
-      <div style="margin-bottom:1rem;">
-        <a href="{% url 'blog:author_post_new' %}" class="btn-terminal">+ Nowy post</a>
+      <div class="author-panel-toolbar" role="toolbar" aria-label="Akcje panelu autora">
+        <a href="{% url 'blog:author_post_new' %}" class="btn-terminal" aria-label="Dodaj nowy post">+ Nowy post</a>
+        {% if is_moderator %}<span class="moderator-badge" aria-label="Tryb moderatora">MOD</span>{% endif %}
       </div>
 
       {% if posts %}
-      <div class="author-posts-table">
+      <div class="author-posts-table" role="table" aria-label="Lista postów">
+        <div class="author-posts-header" role="row">
+          <span role="columnheader">Tytuł</span>
+          {% if is_moderator %}<span role="columnheader">Autor</span>{% endif %}
+          <span role="columnheader">Data</span>
+          <span role="columnheader">Status</span>
+          <span role="columnheader">Widoki</span>
+          <span role="columnheader" class="sr-only">Akcje</span>
+        </div>
         {% for post in posts %}
-        <div class="author-post-row">
-          <div class="author-post-info">
-            <a href="{{ post.get_absolute_url }}" class="author-post-title">{{ post.title }}</a>
-            <div class="author-post-meta">
-              <span class="author-post-date">{{ post.publish|date:"Y-m-d" }}</span>
-              <span class="author-post-status author-post-status--{{ post.status }}">{{ post.get_status_display }}</span>
-            </div>
+        <div class="author-post-row" role="row">
+          <div class="author-post-title-cell" role="cell">
+            <a href="{{ post.get_absolute_url }}" class="author-post-title"
+               aria-label="Przejdź do posta: {{ post.title }}">{{ post.title }}</a>
           </div>
-          <div class="author-post-actions">
-            <a href="{% url 'blog:author_post_edit' post.slug %}" class="btn-terminal btn-sm">Edytuj</a>
-            <a href="{% url 'blog:author_post_delete' post.slug %}" class="btn-terminal btn-sm btn-danger">Usuń</a>
+          {% if is_moderator %}
+          <div class="author-post-author" role="cell">{{ post.author.username }}</div>
+          {% endif %}
+          <div class="author-post-date" role="cell">
+            <time datetime="{{ post.publish|date:'c' }}">{{ post.publish|date:"Y-m-d" }}</time>
+          </div>
+          <div role="cell">
+            <span class="status-badge status-badge--{{ post.status }}">{{ post.get_status_display }}</span>
+          </div>
+          <div class="author-post-views" role="cell">{{ post.views_count }}</div>
+          <div class="author-post-actions" role="cell">
+            <a href="{% url 'blog:author_post_edit' post.slug %}" class="btn-terminal btn-sm"
+               aria-label="Edytuj: {{ post.title }}">Edytuj</a>
+            <a href="{% url 'blog:author_post_delete' post.slug %}" class="btn-terminal btn-sm btn-danger"
+               aria-label="Usuń: {{ post.title }}">Usuń</a>
           </div>
         </div>
         {% endfor %}
       </div>
       {% else %}
-        <p class="settings-desc">Nie masz jeszcze żadnych postów.</p>
+        <p class="settings-desc">
+          {% if is_moderator %}Brak postów w systemie.{% else %}Nie masz jeszcze żadnych postów.{% endif %}
+        </p>
       {% endif %}
 
     </div>

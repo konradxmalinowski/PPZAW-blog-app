@@ -1,107 +1,52 @@
 # DevLog
 
-Blog dokumentujący cykl tworzenia aplikacji webowej w Django. Terminal-style UI, DRF REST API, system kont użytkowników, RSS, sitemap.
+Blog dokumentujący cykl tworzenia aplikacji webowej w Django. Terminal-style UI, DRF REST API, system kont z 2FA, RSS, newsletter, moderacja.
 
-## Wymagania
+## Dokumentacja
 
-- Python 3.14+
-- pip
+| Plik | Opis |
+|------|------|
+| [docs/01-setup.md](docs/01-setup.md) | Instalacja, zmienne środowiskowe, testy, backup, logi |
+| [docs/02-architecture.md](docs/02-architecture.md) | Stack, modele danych, URL namespaces, middleware |
+| [docs/03-security.md](docs/03-security.md) | Brute-force, rate limiting, 2FA, XSS, CSRF, audit log |
+| [docs/04-api.md](docs/04-api.md) | REST API — endpointy, autoryzacja, przykłady curl |
+| [docs/05-frontend.md](docs/05-frontend.md) | CSS design system, JS, dark/light mode, komponenty |
+| [docs/06-features.md](docs/06-features.md) | Funkcje: komentarze, 2FA, newsletter, panel autora, moderacja |
 
-## Uruchomienie (dev)
-
-### 1. Sklonuj repozytorium
+## Szybki start
 
 ```bash
 git clone <repo-url>
 cd DjangoProject
-```
 
-### 2. Utwórz i aktywuj środowisko wirtualne
+python3.14 -m venv venv
+source venv/bin/activate
 
-```bash
-python3.14 -m venv .venv
-source .venv/bin/activate
-```
-
-### 3. Zainstaluj zależności
-
-```bash
 pip install -r requirements/local.txt
-```
 
-### 4. Skonfiguruj zmienne środowiskowe
-
-```bash
 cp .env.example .env
-```
+# Uzupełnij SECRET_KEY, SUPERUSER_* i EMAIL_* w .env
 
-Edytuj `.env` — wystarczą wartości domyślne na dev (SQLite, email na konsolę).
-
-### 5. Zastosuj migracje i utwórz superusera
-
-```bash
 DJANGO_SETTINGS_MODULE=devlog.settings.local python manage.py migrate
-DJANGO_SETTINGS_MODULE=devlog.settings.local python manage.py createsuperuser
-```
+# Superuser i przykładowe posty tworzone automatycznie
 
-### 6. Uruchom serwer
-
-```bash
 DJANGO_SETTINGS_MODULE=devlog.settings.local python manage.py runserver
 ```
 
-Aplikacja dostępna pod: **http://127.0.0.1:8000**
+Aplikacja: **http://127.0.0.1:8000** | Admin: **http://127.0.0.1:8000/admin**
 
-Panel admina: **http://127.0.0.1:8000/admin**
-
----
-
-## Adresy
-
-| Adres | Opis |
-|---|---|
-| `/` | Lista postów |
-| `/blog/<rok>/<mies>/<dzień>/<slug>/` | Szczegół posta |
-| `/search/` | Wyszukiwarka |
-| `/accounts/register/` | Rejestracja |
-| `/accounts/login/` | Logowanie |
-| `/accounts/profile/` | Profil użytkownika |
-| `/api/` | REST API (DRF) |
-| `/api/posts/` | Lista/tworzenie postów |
-| `/api/auth/token/` | Token autoryzacyjny |
-| `/sitemap.xml` | Sitemap XML |
-| `/robots.txt` | Robots.txt |
-| `/blog/feed/` | RSS (wszystkie posty) |
-| `/admin/` | Panel administracyjny |
-
-## REST API — szybki start
-
-Uzyskaj token:
-
-```bash
-curl -X POST http://127.0.0.1:8000/api/auth/token/ \
-  -H "Content-Type: application/json" \
-  -d '{"username": "twoj_user", "password": "twoje_haslo"}'
-```
-
-Utwórz post:
-
-```bash
-curl -X POST http://127.0.0.1:8000/api/posts/ \
-  -H "Authorization: Token <token>" \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Nowy post", "body": "Treść...", "status": "published"}'
-```
-
-## Testy
-
-```bash
-DJANGO_SETTINGS_MODULE=devlog.settings.local python manage.py test apps.api
-```
+Pełna instrukcja: [docs/01-setup.md](docs/01-setup.md)
 
 ## Stack
 
 - Python 3.14, Django 5.2
-- django-taggit, djangorestframework, django-markdownx, Pillow, bleach, python-decouple
 - SQLite (dev) — PostgreSQL-ready
-- Terminal CSS (własny, dark #0d1117, JetBrains Mono)
+- Django REST Framework, django-taggit, django-markdownx
+- pyotp (2FA TOTP), django-axes (brute-force), django-ratelimit, bleach (XSS)
+- Terminal dark theme (własny CSS), JetBrains Mono, Vanilla JS
+
+## Testy
+
+```bash
+DJANGO_SETTINGS_MODULE=devlog.settings.local venv/bin/pytest -v
+```

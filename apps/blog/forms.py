@@ -2,6 +2,7 @@ import bleach
 from django import forms
 
 from apps.blog.models import Comment, Post
+from apps.blog.profanity import contains_profanity
 
 ALLOWED_COMMENT_TAGS = ['b', 'i', 'em', 'strong', 'code', 'pre', 'a', 'p', 'br']
 ALLOWED_COMMENT_ATTRS = {'a': ['href', 'title']}
@@ -44,9 +45,18 @@ class CommentForm(forms.ModelForm):
             'body': 'Komentarz',
         }
 
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if contains_profanity(name):
+            raise forms.ValidationError('Nazwa zawiera niedozwolone słowa.')
+        return name
+
     def clean_body(self):
         body = self.cleaned_data['body']
-        return bleach.clean(body, tags=ALLOWED_COMMENT_TAGS, attributes=ALLOWED_COMMENT_ATTRS, strip=True)
+        clean = bleach.clean(body, tags=ALLOWED_COMMENT_TAGS, attributes=ALLOWED_COMMENT_ATTRS, strip=True)
+        if contains_profanity(clean):
+            raise forms.ValidationError('Komentarz zawiera niedozwolone słowa.')
+        return clean
 
 
 class SearchForm(forms.Form):

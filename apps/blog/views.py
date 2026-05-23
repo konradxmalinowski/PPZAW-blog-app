@@ -39,7 +39,7 @@ def post_list_by_tag(request, tag_slug):
     posts = Post.published.filter(tags__in=[tag])
 
     # Manual pagination
-    paginator = Paginator(posts, 3)
+    paginator = Paginator(posts, django_settings.BLOG_POSTS_PER_PAGE)
     page_number = request.GET.get('page', 1)
     try:
         page_obj = paginator.page(page_number)
@@ -135,6 +135,8 @@ def post_detail(request, year, month, day, post):
                 new_comment.email = request.user.email
             new_comment.save()
             _notify_author_new_comment(post_obj, new_comment)
+            messages.success(request, 'Komentarz dodany — czeka na moderację.')
+            return redirect(post_obj.get_absolute_url())
     else:
         comment_form = CommentForm()
 
@@ -325,8 +327,13 @@ def _send_newsletter_confirm(request, subscriber):
 
 @login_required
 def author_post_list(request):
-    posts = Post.objects.filter(author=request.user).order_by('-publish')
-    return render(request, 'blog/author_post_list.html', {'posts': posts, 'section': 'blog'})
+    if request.user.is_staff:
+        posts = Post.objects.all().order_by('-publish')
+    else:
+        posts = Post.objects.filter(author=request.user).order_by('-publish')
+    return render(request, 'blog/author_post_list.html', {
+        'posts': posts, 'section': 'blog', 'is_moderator': request.user.is_staff,
+    })
 
 
 @login_required
@@ -347,7 +354,10 @@ def author_post_new(request):
 
 @login_required
 def author_post_edit(request, slug):
-    post = get_object_or_404(Post, slug=slug, author=request.user)
+    if request.user.is_staff:
+        post = get_object_or_404(Post, slug=slug)
+    else:
+        post = get_object_or_404(Post, slug=slug, author=request.user)
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
@@ -361,7 +371,10 @@ def author_post_edit(request, slug):
 
 @login_required
 def author_post_delete(request, slug):
-    post = get_object_or_404(Post, slug=slug, author=request.user)
+    if request.user.is_staff:
+        post = get_object_or_404(Post, slug=slug)
+    else:
+        post = get_object_or_404(Post, slug=slug, author=request.user)
     if request.method == 'POST':
         post.delete()
         messages.success(request, 'Post usunięty.')
