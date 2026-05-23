@@ -45,6 +45,13 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            if getattr(django_settings, 'DEMO_MODE', False):
+                user.is_active = True
+                user.save()
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                log_action(request, user, 'register')
+                messages.info(request, 'Tryb demo — konto aktywowane automatycznie (bez weryfikacji email).')
+                return redirect('blog:post_list')
             user.is_active = False
             user.save()
             token = EmailVerificationToken.objects.create(user=user)

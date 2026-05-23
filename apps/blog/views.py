@@ -177,7 +177,8 @@ def post_detail(request, year, month, day, post):
 
 
 def _notify_author_new_comment(post, comment):
-    """Send email to post author when a new comment is approved."""
+    if getattr(django_settings, 'DEMO_MODE', False):
+        return
     try:
         author = post.author
         if not author.email:
@@ -205,6 +206,11 @@ def post_share(request, post_id):
     if request.method == 'POST':
         form = EmailPostForm(request.POST)
         if form.is_valid():
+            if getattr(django_settings, 'DEMO_MODE', False):
+                messages.info(request, 'Tryb demo — wysyłanie emaili jest wyłączone.')
+                return render(request, 'blog/post_share.html', {
+                    'post': post, 'form': form, 'sent': False, 'section': 'blog',
+                })
             cd = form.cleaned_data
             post_url = request.build_absolute_uri(post.get_absolute_url())
             subject = f'{cd["name"]} ({cd["email"]}) poleca: "{post.title}"'
@@ -288,6 +294,9 @@ def bookmark_list(request):
 @ratelimit(key='ip', rate='5/h', method='POST', block=True)
 def newsletter_subscribe(request):
     if request.method == 'POST':
+        if getattr(django_settings, 'DEMO_MODE', False):
+            messages.info(request, 'Tryb demo — wysyłanie emaili jest wyłączone.')
+            return redirect(request.META.get('HTTP_REFERER', '/'))
         email = request.POST.get('email', '').strip()
         try:
             validate_email(email)

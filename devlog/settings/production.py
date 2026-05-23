@@ -52,14 +52,9 @@ X_FRAME_OPTIONS = 'DENY'
 # ── Site URL (used in SEO canonical, OG tags) ─────────────────────────────────
 SITE_URL = config('SITE_URL', default='https://devlog.onrender.com')
 
-# ── Email — Brevo API (HTTPS, works on Render free tier) ─────────────────────
-BREVO_API_KEY = config('BREVO_API_KEY', default='')
-if BREVO_API_KEY:
-    EMAIL_BACKEND = 'anymail.backends.brevo.EmailBackend'
-    ANYMAIL = {'BREVO_API_KEY': BREVO_API_KEY}
-else:
-    # Fallback: SMTP with short timeout so blocked port fails fast, not after 120 s
-    EMAIL_TIMEOUT = 5
+# ── Email — tryb demo (SMTP zablokowany na Render free tier) ─────────────────
+DEMO_MODE = True
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 # ── Logging — stdout only (Render captures stdout in its log viewer) ──────────
 LOGGING = {
