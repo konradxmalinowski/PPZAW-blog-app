@@ -291,7 +291,7 @@ def newsletter_subscribe(request):
             messages.error(request, 'Nieprawidłowy adres e-mail.')
             return redirect(request.META.get('HTTP_REFERER', '/'))
         sub, created = Subscriber.objects.get_or_create(email=email)
-        if created:
+        if created or not sub.confirmed:
             _send_newsletter_confirm(request, sub)
             messages.success(request, 'Sprawdź skrzynkę i potwierdź subskrypcję.')
         else:
