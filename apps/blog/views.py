@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings as django_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -18,6 +20,8 @@ from django_ratelimit.decorators import ratelimit
 from taggit.models import Tag
 
 from apps.blog.forms import CommentForm, EmailPostForm, PostForm, SearchForm
+
+logger = logging.getLogger(__name__)
 from apps.blog.models import Bookmark, Comment, Category, Post, PostReaction, Subscriber
 
 
@@ -186,7 +190,7 @@ def _notify_author_new_comment(post, comment):
             f'Hej {author.get_full_name() or author.username},\n\n'
             f'{comment.name} skomentował(a) Twój post "{post.title}":\n\n'
             f'{comment.body}\n\n'
-            f'Przejdź do posta:\n{post.get_absolute_url()}'
+            f'Przejdź do posta:\n{getattr(django_settings, "SITE_URL", "").rstrip("/")}{post.get_absolute_url()}'
         )
         send_mail(subject, message, django_settings.DEFAULT_FROM_EMAIL, [author.email], fail_silently=True)
     except Exception:
@@ -316,16 +320,18 @@ def newsletter_unsubscribe(request, token):
 
 
 def _send_newsletter_confirm(request, subscriber):
-    confirm_url = request.build_absolute_uri(
-        reverse('blog:newsletter_confirm', args=[subscriber.token])
-    )
-    send_mail(
-        'Potwierdź subskrypcję DevLog',
-        f'Kliknij link, by potwierdzić:\n{confirm_url}',
-        django_settings.DEFAULT_FROM_EMAIL,
-        [subscriber.email],
-        fail_silently=True,
-    )
+    site_url = getattr(django_settings, 'SITE_URL', '').rstrip('/')
+    confirm_url = f'{site_url}{reverse("blog:newsletter_confirm", args=[subscriber.token])}'
+    try:
+        send_mail(
+            'Potwierdź subskrypcję DevLog',
+            f'Kliknij link, by potwierdzić:\n{confirm_url}',
+            django_settings.DEFAULT_FROM_EMAIL,
+            [subscriber.email],
+        )
+        logger.info('Newsletter confirm sent to %s', subscriber.email)
+    except Exception as exc:
+        logger.error('Newsletter confirm failed for %s: %s', subscriber.email, exc)
 
 
 @login_required
