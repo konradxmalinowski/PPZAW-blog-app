@@ -1881,37 +1881,39 @@ select:focus-visible {
   border-radius: var(--radius);
   letter-spacing: 0.1em;
 }
-.author-posts-table {
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+.posts-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 0.88em;
 }
-.author-posts-header {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto auto auto;
-  gap: 0.5rem;
-  padding: 0.4rem 0.75rem;
+.posts-table th {
+  padding: 0.45rem 0.75rem;
+  text-align: left;
   font-size: 0.78em;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   border-bottom: 1px solid var(--bg-border);
+  white-space: nowrap;
 }
-.author-post-row {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto auto auto;
-  gap: 0.5rem;
-  align-items: center;
-  padding: 0.65rem 0.75rem;
+.posts-table td {
+  padding: 0.6rem 0.75rem;
   border-bottom: 1px solid var(--bg-border);
-  transition: background-color var(--transition);
+  vertical-align: middle;
 }
-.author-post-row:hover { background-color: var(--bg-hover); }
-.author-post-title { color: var(--accent-blue); text-decoration: none; font-size: 0.92em; }
-.author-post-title:hover { color: var(--accent-green); text-decoration: underline; }
-.author-post-author { font-size: 0.82em; color: var(--text-secondary); }
-.author-post-date { font-size: 0.82em; color: var(--text-muted); white-space: nowrap; }
-.author-post-views { font-size: 0.82em; color: var(--text-muted); text-align: right; }
-.author-post-actions { display: flex; gap: 0.35rem; }
+.posts-table tbody tr:hover { background-color: var(--bg-hover); }
+.posts-table .col-title { min-width: 180px; }
+.posts-table .col-author { white-space: nowrap; color: var(--text-secondary); }
+.posts-table .col-date { white-space: nowrap; color: var(--text-muted); }
+.posts-table .col-views { text-align: right; white-space: nowrap; color: var(--text-muted); }
+.posts-table .col-actions { white-space: nowrap; }
+.posts-table .col-actions { display: flex; gap: 0.35rem; align-items: center; }
+.post-title-link { color: var(--accent-blue); text-decoration: none; }
+.post-title-link:hover { color: var(--accent-green); text-decoration: underline; }
 
 .status-badge {
   font-size: 0.72em;
