@@ -4,8 +4,8 @@
 # BEFORE first deploy, add these env vars manually in the Render dashboard
 # (they are NOT here because they contain secrets):
 #   SUPERUSER_USERNAME, SUPERUSER_EMAIL, SUPERUSER_PASSWORD
-#   RESEND_API_KEY        (from resend.com — free, replaces Gmail SMTP)
-#   DEFAULT_FROM_EMAIL    (e.g. "DevLog <onboarding@resend.dev>")
+#   BREVO_API_KEY         (from brevo.com — free, 300 emails/day, replaces Gmail SMTP)
+#   DEFAULT_FROM_EMAIL    (e.g. "DevLog <your@verified-sender.com>")
 #   SITE_DEFAULT_OG_IMAGE (optional)
 
 services:
