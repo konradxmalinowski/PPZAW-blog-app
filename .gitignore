@@ -1,9 +1,11 @@
 .venv/
+venv/
 __pycache__/
 *.pyc
 *.pyo
 db.sqlite3
 .env
+prod.env
 media/
 staticfiles/
 .DS_Store
@@ -11,3 +13,5 @@ staticfiles/
 *.egg-info/
 dist/
 build/
+logs/
+backups/
